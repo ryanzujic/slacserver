@@ -1,1 +1,1 @@
-# slac_server
+# Functional features of the SLAC server
