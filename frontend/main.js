@@ -12,6 +12,6 @@ document.getElementById('submit-3-seq-button').addEventListener('click', async (
     });
 
     const data = await response.json();
-    document.getElementById('result').textContent = data.result
+    document.getElementById('result').textContent = data.result;
 
 });
