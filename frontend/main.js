@@ -38,15 +38,15 @@ document.getElementById('submit-3-seq-button').addEventListener('click', async (
             });
 
             if (!response.ok) {
-                throw new Error('Server responded with status ${response.status}')
+                throw new Error(`Server responded with status ${response.status}`)
             }
 
             const data = await response.json();
-            resultDiv.textContent = 'SLAC: ${data.result}';
+            resultDiv.textContent = `SLAC: ${data.result}`;
             // In status dialog show time taken to process the request.
-            statusDiv.textContent = 'Completed in ${data.time}s.';
+            statusDiv.textContent = `Completed in ${data.time}s.`;
     } catch (error) {
-    statusDiv.textContent = 'Error: ${error.message}';
+    statusDiv.textContent = `Error: ${error.message}`;
     } finally {
         // Re-enable button and reset text
         button.disabled = false;
