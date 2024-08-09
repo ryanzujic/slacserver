@@ -1,4 +1,4 @@
-document.getElementById('submit-3-seq-button').addEventListener('click', async () = {
+document.getElementById('submit-3-seq-button').addEventListener('click', async () => {
     const hit_seq = document.getElementById('hit_seq').value;
     const full_ref_seq = document.getElementById('full_ref_seq').value;
     const ref_context_seq = document.getElementById('ref_context_seq').value;
@@ -46,7 +46,7 @@ document.getElementById('submit-3-seq-button').addEventListener('click', async (
             // In status dialog show time taken to process the request.
             statusDiv.textContent = `Completed in ${data.time}s.`;
     } catch (error) {
-    statusDiv.textContent = 'Error: ${error.message}';}
+    statusDiv.textContent = 'Error: ${error.message}';
     } finally {
         // Re-enable button and reset text
         button.disabled = false;
