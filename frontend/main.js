@@ -1,6 +1,6 @@
 document.getElementById('submit-3-seq-button').addEventListener('click', async () => {
     const hit_seq = document.getElementById('hit_seq').value;
-    const full_ref_seq = document.getElementById('full_ref_seq').value;
+    const full_ref_seq = document.getElementById('ref_seq').value;
     const ref_context_seq = document.getElementById('ref_context_seq').value;
     const button = document.getElementById('submit-3-seq-button');
     const statusDiv = document.getElementById('status');
