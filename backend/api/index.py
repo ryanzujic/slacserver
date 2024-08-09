@@ -7,7 +7,7 @@ def generateSlac():
     data = request.get_json()
     hit_seq = data.get('hit_seq')
     full_ref_seq = data.get('full_ref_seq')
-    ref_context_subseq = data.get('ref_context_subseq')
+    ref_context_seq = data.get('ref_context_seq')
 
     # TODO - Add logic here to generate SLAC
 

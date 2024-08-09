@@ -1,0 +1,16 @@
+Custom License for code with the SLAC Server
+
+1. Attribution
+   All uses of this software, including modifications and derivative works, must provide clear and appropriate credit to Ryan Zujic, including a link to the original source code repository.
+
+2. Non-Publication and Redistribution
+   This software is provided for personal and academic research use only. Redistribution, publication, or use of this software or its derivatives in any form is prohibited until the official release by Ryan Zujic. This restriction includes, but is not limited to, submission to journals, conferences, or other public venues, including commercial software distribution platforms.
+
+3. AI Training Prohibition
+   This software and its derivatives may not be used as part of any machine learning, AI training, or AI model development without explicit permission from Ryan Zujic.
+
+4. Future Licensing
+   This software is intended to be released under a more permissive open-source license (e.g., MIT) following the official publication. Upon publication this license will be replaced with an open-source license specified by Ryan Zujic.
+
+5. Disclaimer
+   THIS SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS BE LIABLE FOR ANY CLAIM, DAMAGES, OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT, OR OTHERWISE, ARISING FROM, OUT OF, OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
