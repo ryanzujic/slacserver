@@ -50,7 +50,7 @@ document.getElementById('submit-3-seq-button').addEventListener('click', async (
             `;
 
             // In status dialog show time taken to process the request.
-            statusDiv.textContent = `Completed in ${data.time}s.`;
+            statusDiv.textContent = `Completed in ${data.time.toFixed(2)}s.`;
     } catch (error) {
     statusDiv.textContent = `Error: ${error.message}`;
     } finally {
