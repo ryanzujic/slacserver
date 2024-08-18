@@ -1,8 +1,19 @@
+import logging
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 
 app = Flask(__name__)
-CORS(app, origins=["https://ryanzujic.github.io/slacserver/"])
+CORS(app, origins=["https://ryanzujic.github.io"])
+
+
+# Set up logging
+logging.basicConfig(level=logging.INFO)
+
+@app.after_request
+def after_request(response):
+    # Log all response headers
+    logging.info("Response Headers: %s", response.headers)
+    return response
 
 @app.route('/generate-slac', methods=['POST'])
 def generateSlac():
