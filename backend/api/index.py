@@ -1,6 +1,8 @@
-from flask import Flash, request, jsonify
+from flask import Flask, request, jsonify
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app, origins=["https://ryanzujic.github.io/slacserver/"])
 
 @app.route('/generate-slac', methods=['POST'])
 def generateSlac():
