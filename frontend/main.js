@@ -42,7 +42,7 @@ document.getElementById('submit-3-seq-button').addEventListener('click', async (
             }
 
             const data = await response.json();
-            resultDiv.textContent = `SLAC: ${data.result}`;
+            resultDiv.textContent = `Full: ${data.slac_full}<br>Full Encoded: ${data.slac_full_encoded}<br>Mini: ${data.slac_short}`;
             // In status dialog show time taken to process the request.
             statusDiv.textContent = `Completed in ${data.time}s.`;
     } catch (error) {

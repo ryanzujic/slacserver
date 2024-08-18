@@ -1,6 +1,7 @@
 import logging
 from flask import Flask, request, jsonify
 from flask_cors import CORS
+from .slac import SlacView
 
 app = Flask(__name__)
 CORS(app, origins=["https://ryanzujic.github.io"])
@@ -22,11 +23,9 @@ def generateSlac():
     full_ref_seq = data.get('full_ref_seq')
     ref_context_seq = data.get('ref_context_seq')
 
-    # TODO - Add logic here to generate SLAC
+    slac = SlacView(genomic=full_ref_seq, cds=ref_context_seq, hit=hit_seq)
 
-    result = "Some result"
-
-    return jsonify({'result': result})
+    return jsonify({'slac_full': slac.full(), 'slac_full_encoded': slac.full(encoded_hit=True), 'slac_short': slac.short()})
 
 if __name__ == '__main__':
     app.run(debug=True)
