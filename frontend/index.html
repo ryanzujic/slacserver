@@ -6,19 +6,30 @@
     <title>Single Line Alignment with Context - Preview</title>
     <style>
         body { font-family: Arial, sans-serif; }
-        .container { max-width: 600px; margin: 50px auto; text-align:center; }
-        input { width: 100%; padding: 10px; margin: 10px 0; }
+        .container { max-width: 600px; margin: 50px auto; text-align: center; }
+        .input-container { display: grid; grid-template-columns: 200px 1fr; align-items: center; margin: 10px 0; }
+        .input-container label { text-align: right; padding-right: 10px}
+        .input-container input { width: 100%; padding: 10px; font-family: 'Courier New', Courier, monospace; }
         button { padding: 10px 20px; }
-        #result { margin-top: 20px; font-weight: bold; }
+        #result { margin-top: 20px; font-weight: bold; font-family: 'Courier New', Courier, monospace;}
         #status { margin-top: 10px; font-style: italic; color: #555; }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>SLAC Preview Builder</h1>
-        <input type="text" id="hit_seq" placeholder="Enter hit DNA sequence">
-        <input type="text" id="ref_seq" placeholder="Enter reference DNA sequence (eg gene genomic seq)">
-        <input type="text" id="ref_context_seq" placeholder="Enter reference context DNA sequence (eg gene coding seq)">
+        <div class="input-container">
+            <label for="hit_seq">Hit</label>
+            <input type="text" id="hit_seq" placeholder="Aligned hit DNA sequence">
+        </div>
+        <div class="input-container">
+            <label for="ref_context_seq">Reference Context (e.g. CDS)</label>
+            <input type="text" id="ref_context_seq" placeholder="Aligned reference context DNA sequence (e.g. gene coding seq)">
+        </div>
+        <div class="input-container">
+            <label for="ref_seq">Reference</label>
+            <input type="text" id="ref_seq" placeholder="Aligned reference DNA sequence (e.g. gene genomic seq)">
+        </div>
         <button id="submit-3-seq-button">Submit</button>
         <div id="status"></div>
         <div id="result"></div>

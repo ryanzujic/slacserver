@@ -45,7 +45,7 @@ document.getElementById('submit-3-seq-button').addEventListener('click', async (
 
             resultDiv.innerHTML = `
             <p><b>Full:</b> ${data.slac_full}</p>
-            <p><b>Full Encoded:</b>$ {data.slac_full_encoded}</p>
+            <p><b>Full Encoded:</b> ${data.slac_full_encoded}</p>
             <p><b>Mini:</b> ${data.slac_short}</p>
             `;
 
