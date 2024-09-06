@@ -1,0 +1,10 @@
+# Site settings
+title: Single Line Alignment with Context
+description: Information and interactive demos for the SLAC alignment system to enable compact DNA sequence alignment previews
+author:
+  name: Ryan Zujic
+
+# Build settings
+remote_theme: pages-themes/cayman@v0.2.0
+plugins:
+  - jekyll-remote-theme

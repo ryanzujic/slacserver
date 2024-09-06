@@ -8,6 +8,8 @@ app = Flask(__name__)
 CORS(app, origins=["https://ryanzujic.github.io"])
 
 
+# TODO - The the sequence mapping is likely wrong, seeing ? where there should be X
+
 # Set up logging
 logging.basicConfig(level=logging.INFO)
 
