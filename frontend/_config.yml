@@ -1,0 +1,5 @@
+remote_theme: pages-themes/cayman@v0.2.0
+title: Single Line Alignment with Context
+description: Information and interactive demos for the SLAC alignment system to enable compact DNA sequence alignment previews
+plugins:
+  - jekyll-remote-theme
