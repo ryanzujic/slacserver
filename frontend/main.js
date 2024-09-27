@@ -1,18 +1,18 @@
 // Load Example A - Pre-fill sequences and trigger process
 document.getElementById('load-example-a').addEventListener('click', () => {
     document.getElementById('per-sequence-tab').click();
-    document.getElementById('genomic_seq').value = 'ATGCGT...';  // Example A genomic
-    document.getElementById('coding_seq').value = 'ATGCGT...';   // Example A coding
-    document.getElementById('hit_seq').value = 'TGA...';         // Example A hit
+    document.getElementById('genomic_seq').value = 'ATGCGTATG';  // Example A genomic
+    document.getElementById('coding_seq').value = '--GCGTA--';   // Example A coding
+    document.getElementById('hit_seq').value = 'ATGCGTATG';         // Example A hit
     document.getElementById('process-per-sequence').click();
 });
 
 // Load Example B - Pre-fill sequences and trigger process
 document.getElementById('load-example-b').addEventListener('click', () => {
     document.getElementById('per-sequence-tab').click();
-    document.getElementById('genomic_seq').value = 'CGTACG...';  // Example B genomic
-    document.getElementById('coding_seq').value = 'CGTACG...';   // Example B coding
-    document.getElementById('hit_seq').value = 'CGT...';         // Example B hit
+    document.getElementById('genomic_seq').value = 'ATGCGTATG';  // Example B genomic
+    document.getElementById('coding_seq').value = '--GCGTA--';   // Example B coding
+    document.getElementById('hit_seq').value = 'ATGGGTAAG';         // Example B hit
     document.getElementById('process-per-sequence').click();
 });
 
@@ -35,39 +35,66 @@ document.getElementById('process-per-sequence').addEventListener('click', async 
     const full_ref_seq = document.getElementById('genomic_seq').value.trim();
     const ref_context_seq = document.getElementById('coding_seq').value.trim();
 
+    updateLog('Processing... Please wait.', 'info');
+
     try {
+        const startTime = performance.now();
         const response = await fetch('/slac-3-input', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ hit_seq, full_ref_seq, ref_context_seq })
         });
 
-        const data = await response.json();
-        displayResults(data);
+        const endTime = performance.now();
+        const elapsedTime = (endTime - startTime).toFixed(2);
+
+        if (response.ok) {
+            const data = await response.json();
+            updateLog(`Finished in ${elapsedTime} ms`, 'success');
+            displayResults(data);
+        } else {
+            const errorData = await response.json();
+            updateLog(`Error: ${errorData.error}`, 'danger');  // Backend error display
+        }
     } catch (error) {
-        console.error('Error processing 3-sequence input:', error);
+        console.error('Error processing request:', error);
+        updateLog('An unexpected error occurred. Please try again later.', 'danger');
     }
 });
 
 document.getElementById('process-fasta-text').addEventListener('click', async () => {
     const fasta_text = document.getElementById('fasta_text').value.trim();
 
+    updateLog('Processing... Please wait.', 'info');
+
     try {
+        const startTime = performance.now();
         const response = await fetch('/slac-paste-fasta', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ fasta_text })
         });
 
-        const data = await response.json();
-        displayResults(data);
+        const endTime = performance.now();
+        const elapsedTime = (endTime - startTime).toFixed(2);
+
+        if (response.ok) {
+            const data = await response.json();
+            updateLog(`Finished in ${elapsedTime} ms`, 'success');
+            displayResults(data);
+        } else {
+            const errorData = await response.json();
+            updateLog(`Error: ${errorData.error}`, 'danger');  // Backend error display
+        }
     } catch (error) {
-        console.error('Error processing FASTA text input:', error);
+        console.error('Error processing request:', error);
+        updateLog('An unexpected error occurred. Please try again later.', 'danger');
     }
 });
 
 document.getElementById('process-fasta-upload').addEventListener('click', async () => {
     const fasta_file = document.getElementById('fasta_file').files[0];
+
     if (!fasta_file) {
         alert('Please upload a FASTA file.');
         return;
@@ -76,18 +103,39 @@ document.getElementById('process-fasta-upload').addEventListener('click', async 
     const formData = new FormData();
     formData.append('fasta_file', fasta_file);
 
+    updateLog('Processing... Please wait.', 'info');
+
     try {
         const response = await fetch('/slac-upload-fasta', {
             method: 'POST',
             body: formData
         });
 
-        const data = await response.json();
-        displayResults(data);
+        const endTime = performance.now();
+        const elapsedTime = (endTime - startTime).toFixed(2);
+
+        if (response.ok) {
+            const data = await response.json();
+            updateLog(`Finished in ${elapsedTime} ms`, 'success');
+            displayResults(data);
+        } else {
+            const errorData = await response.json();
+            updateLog(`Error: ${errorData.error}`, 'danger');  // Backend error display
+        }
     } catch (error) {
-        console.error('Error processing FASTA file upload:', error);
+        console.error('Error processing request:', error);
+        updateLog('An unexpected error occurred. Please try again later.', 'danger');
     }
 });
+
+// Helper function to update the log message
+function updateLog(message, type = 'info') {
+    const logAlert = document.getElementById('log_alert');
+    logAlert.textContent = message;
+
+    // Remove any existing alert-* classes (for type consistency)
+    logAlert.className = 'alert alert-' + type;
+}
 
 // Function to display results
 function displayResults(data) {
