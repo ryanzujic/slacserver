@@ -39,7 +39,7 @@ document.getElementById('process-per-sequence').addEventListener('click', async 
 
     try {
         const startTime = performance.now();
-        const response = await fetch('/slac-3-input', {
+        const response = await fetch('https://slacserver.vercel.app/slac-3-input', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ hit_seq, full_ref_seq, ref_context_seq })
@@ -58,7 +58,7 @@ document.getElementById('process-per-sequence').addEventListener('click', async 
         }
     } catch (error) {
         console.error('Error processing request:', error);
-        updateLog('An unexpected error occurred. Please try again later.', 'danger');
+        updateLog('An unexpected error occurred processing per sequence. Please review your inputs and try again later', 'danger');
     }
 });
 
@@ -69,7 +69,7 @@ document.getElementById('process-fasta-text').addEventListener('click', async ()
 
     try {
         const startTime = performance.now();
-        const response = await fetch('/slac-paste-fasta', {
+        const response = await fetch('https://slacserver.vercel.app/slac-paste-fasta', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ fasta_text })
@@ -88,7 +88,7 @@ document.getElementById('process-fasta-text').addEventListener('click', async ()
         }
     } catch (error) {
         console.error('Error processing request:', error);
-        updateLog('An unexpected error occurred. Please try again later.', 'danger');
+        updateLog('An unexpected error occurred processing FASTA text. Please review your inputs and try again later', 'danger');
     }
 });
 
@@ -106,7 +106,7 @@ document.getElementById('process-fasta-upload').addEventListener('click', async 
     updateLog('Processing... Please wait.', 'info');
 
     try {
-        const response = await fetch('/slac-upload-fasta', {
+        const response = await fetch('https://slacserver.vercel.app/slac-upload-fasta', {
             method: 'POST',
             body: formData
         });
@@ -124,7 +124,7 @@ document.getElementById('process-fasta-upload').addEventListener('click', async 
         }
     } catch (error) {
         console.error('Error processing request:', error);
-        updateLog('An unexpected error occurred. Please try again later.', 'danger');
+        updateLog('An unexpected error occurred processing the file. Please review your inputs and try again later', 'danger');
     }
 });
 
