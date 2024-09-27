@@ -96,7 +96,7 @@ class SLAC(object):
 
 
 
-        self.size_limit = size_limit
+        self.size_limit = int(size_limit)
         # The full length, symbolic alignment representation
         self._full = ''
         # The full length, symbolic alignment representation, characters that match the CDS in the hit use an uppercase
