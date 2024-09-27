@@ -94,8 +94,6 @@ class SLAC(object):
         if not hit:
             self.hit = "-" * max_length
 
-
-
         self.size_limit = int(size_limit)
         # The full length, symbolic alignment representation
         self._full = ''

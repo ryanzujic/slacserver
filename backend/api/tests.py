@@ -20,7 +20,8 @@ class SlacTestCase(unittest.TestCase):
         data = {
             "hit_seq": "ATGGTTAGTAATG",
             "full_ref_seq": "ATGGTA-GTAATG",
-            "ref_context_seq": "---GTA-GTA---"
+            "ref_context_seq": "---GTA-GTA---",
+            "mini_slac_length": 5
         }
 
         # Send POST request to the /slac-3-input route
@@ -46,7 +47,8 @@ ATGGTA-GTAATG
 ATGGTTAGTAATG"""
 
         data = {
-            "fasta_text": fasta_text
+            "fasta_text": fasta_text,
+            "mini_slac_length": 5
         }
 
         # Send POST request to the /slac-paste-fasta route
@@ -76,7 +78,8 @@ ATGGTTAGTAATG"""
 
         # Send POST request to the /slac-upload-fasta route with a file
         response = self.client.post('/slac-upload-fasta',
-                                    data={'fasta_file': (fasta_file, 'test.fasta')},
+                                    data={'fasta_file': (fasta_file, 'test.fasta'),
+                                          "mini_slac_length": 5},
                                     content_type='multipart/form-data')
 
         # Check response status code and content

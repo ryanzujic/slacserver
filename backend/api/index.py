@@ -24,7 +24,7 @@ def slac_3_input():
     hit_seq = data.get('hit_seq')
     full_ref_seq = data.get('full_ref_seq')
     ref_context_seq = data.get('ref_context_seq')
-    mini_slac_length = request.form.get('mini_slac_length')
+    mini_slac_length = data.get('mini_slac_length')
 
     if hit_seq:
         hit_seq = sanitise_string(hit_seq)
@@ -42,7 +42,7 @@ def slac_paste_fasta():
     # Ingest JSON input from request
     data = request.get_json()
     fasta_text = data.get('fasta_text')
-    mini_slac_length = request.form.get('mini_slac_length')
+    mini_slac_length = data.get('mini_slac_length')
 
     try:
         sequences = read_fasta_lines(fasta_text.split('\n'))
