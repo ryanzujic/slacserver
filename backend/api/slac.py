@@ -39,13 +39,13 @@ DISPLAY_MODE_SHORT = "short"
 DISPLAY_MODE_FULL = "full"
 DISPLAY_MODE_FULL_HIT = "hits"
 
-class SlacView(object):
+class SLAC(object):
     """
     A class designed to represent a genomic sequence with cds and hit sequences aligned to it
     using a single line of text.
     """
     def __init__(self, genomic=None, cds=None, hit=None, size_limit=DEFAULT_SIZE,
-                 frequency_threshold=DEFAULT_FREQ_THRESHOLD, display_mode=None):
+                 frequency_threshold=DEFAULT_FREQ_THRESHOLD, display_mode=None, auto_align_cds_to_genomic=False):
 
         if genomic and not isinstance(genomic, str):
             raise ValueError(f"genomic must be a string, not {type(genomic)}")
@@ -78,17 +78,23 @@ class SlacView(object):
             raise ValueError("All supplied sequences must be the same length")
         max_length = max(lengths)
 
-        # Fill in blanks to allow use in cases where a sequence is missing
-        if not genomic:
-            genomic = "-" * max_length
-        if not cds:
-            cds = "-" * max_length
-        if not hit:
-            hit = "-" * max_length
+        self.genomic = genomic.upper().replace(" ", "-") if genomic else ""
+        self.cds = cds.upper().replace(" ", "-") if cds else ""
+        self.hit = hit.upper().replace(" ", "-")  if hit else ""
+        
+        # Perform auto alignment of cds to genomic if requested and required.
+        if auto_align_cds_to_genomic and all([self.genomic, self.hit]) and "-" not in self.cds: 
+            cds = self.align_cds_to_genomic(genomic, hit)
 
-        self.genomic = genomic.upper().replace(" ", "-")  # genomic
-        self.cds = cds.upper().replace(" ", "-")  # cds
-        self.hit = hit.upper().replace(" ", "-")  # hit
+        # Fill in blanks to allow use in cases where a sequence type was not provided
+        if not self.genomic:
+            self.genomic = "-" * max_length
+        if not cds:
+            self.cds = "-" * max_length
+        if not hit:
+            self.hit = "-" * max_length
+
+
 
         self.size_limit = size_limit
         # The full length, symbolic alignment representation
@@ -488,3 +494,80 @@ class SlacView(object):
         rle_to_human_readable(short_rle)
         return
 
+    @staticmethod
+    def align_cds_to_genomic(aligned_genomic, cds, kmer_size=5):
+        """
+        As we can assume the coding sequence will align to the genomic sequence with perfect identity, with gaps,
+        the user can provide an un-aligned cds, we can perform simple kmer matching to determine how the cds
+        aligns with the genomic, and retain full functionality of the tool.
+
+        Args:
+            genomic: (str) the genomic sequence
+            cds: (str) the coding sequence
+            kmer_size: (int) the size of the kmers to use for matching. We check kmer windows between the sequences and
+            insert gaps in the CDS until each kmer matches the genomic sequence. When a subsequent kmer does not match,
+            we retry with one size down until we reach 0, at which point we insert gaps until the next full kmer matches.
+            This assumes that any exon is at least the size of the kmer. Default is 5.
+
+        Assumes:
+            The genomic sequences contains the full and exact CDS sequence.
+            The CDS sequence does not contain gaps.
+            No exons are smaller than the kmer size.
+
+        Returns:
+            (str) the CDS sequence with gaps inserted to align it to the genomic sequence
+
+        Raises:
+            ValueError: If the CDS contains gaps or if the entire CDS cannot be aligned by the end of the genomic sequence.
+        """
+
+        aligned_genomic = aligned_genomic.replace(" ", "-")
+        cds = cds.replace(" ", "-")
+
+        # Confirm cds has no gaps, as this would suggest it's already aligned.
+        if "-" in cds:
+            raise ValueError("CDS should not contain gaps for auto alignment to genomic sequence")
+
+        aligned_cds = []
+        cds_index = 0
+
+        i = 0
+        while i < len(aligned_genomic):
+
+            # A gap in the genomic is always a gap in the CDS
+            if aligned_genomic[i] == "-":
+                aligned_cds.append('-')
+                i += 1
+                continue
+
+            match_found = False
+
+            # Try k-mer sizes from the provided kmer_size down to 1
+            for k in range(kmer_size, 0, -1):
+                genomic_kmer = aligned_genomic[i:i + k]
+
+                # Ensure the k-mer from the CDS is not longer than the remaining CDS sequence
+                if cds_index + k <= len(cds):
+                    cds_kmer = cds[cds_index:cds_index + k]
+                else:
+                    cds_kmer = cds[cds_index:]
+
+                # If the k-mers match, append them and move the index forward
+                if genomic_kmer == cds_kmer:
+                    aligned_cds.append(cds_kmer)
+                    cds_index += len(cds_kmer)
+                    i += len(genomic_kmer)
+                    match_found = True
+                    break  # Exit the k-mer size reduction loop since we found a match
+
+            if not match_found:
+                # If no match is found, insert a gap in the CDS
+                aligned_cds.append('-')
+                i += 1  # Move to the next base in the genomic sequence
+
+        # Failure detection: check if we have unaligned characters left in the CDS
+        if cds_index < len(cds):
+            raise ValueError(f"Failed CDS to genomic alignment: {len(cds) - cds_index} bases of the CDS were not aligned to the genomic sequence. "
+                             f"Check the full and exact CDS is within the genomic sequence.")
+
+        return ''.join(aligned_cds)

@@ -3,37 +3,185 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Single Line Alignment with Context - Preview</title>
-    <style>
-        body { font-family: Arial, sans-serif; }
-        .container { max-width: 600px; margin: 50px auto; text-align: center; }
-        .input-container { display: grid; grid-template-columns: 200px 1fr; align-items: center; margin: 10px 0; }
-        .input-container label { text-align: right; padding-right: 10px}
-        .input-container input { width: 100%; padding: 10px; font-family: 'Courier New', Courier, monospace; }
-        button { padding: 10px 20px; }
-        #result { margin-top: 20px; font-weight: bold; font-family: 'Courier New', Courier, monospace;}
-        #status { margin-top: 10px; font-style: italic; color: #555; }
-    </style>
+    <title>SLAC Alignment Preview Tool</title>
+    <!-- Bootstrap CSS from CDN -->
+    <link href="https://unpkg.com/@tabler/core@latest/dist/css/tabler.min.css" rel="stylesheet">
+    <!-- Tabler JavaScript from CDN -->
+    <script src="https://unpkg.com/@tabler/core@latest/dist/js/tabler.min.js" defer></script>
 </head>
 <body>
+<!-- Header -->
+<header class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container">
-        <h1>SLAC Preview Builder</h1>
-        <div class="input-container">
-            <label for="hit_seq">Hit</label>
-            <input type="text" id="hit_seq" placeholder="Aligned hit DNA sequence">
-        </div>
-        <div class="input-container">
-            <label for="ref_context_seq">Reference Context (e.g. CDS)</label>
-            <input type="text" id="ref_context_seq" placeholder="Aligned reference context DNA sequence (e.g. gene coding seq)">
-        </div>
-        <div class="input-container">
-            <label for="ref_seq">Reference</label>
-            <input type="text" id="ref_seq" placeholder="Aligned reference DNA sequence (e.g. gene genomic seq)">
-        </div>
-        <button id="submit-3-seq-button">Submit</button>
-        <div id="status"></div>
-        <div id="result"></div>
+        <h1 class="navbar-brand">SLAC Alignment Preview Tool</h1>
     </div>
-    <script src="main.js"></script>
+</header>
+
+<!-- Section for explanatory text with example loading -->
+<section class="container my-4">
+    <!-- First row: Two paragraphs of text across the full width -->
+    <div class="row">
+        <div class="col-12">
+            <p>Single Line Alignment with Context (SLAC) is a system designed to aid users of genetics/genomics workflows to intuitively understand hits relative to a query gene structure, with extremely compact, plain text previews.</p>
+            <p>For use in your own pipelines and more technical information, please see the <a href="https://github.com/ryanzujic/slac">standalone SLAC repository</a>.</p>
+        </div>
+    </div>
+
+    <!-- Second row: Two columns (Description + Buttons) -->
+    <div class="row mt-3">
+        <!-- Left column: Text description about examples -->
+        <div class="col-md-8">
+            <p>No sequences on hand? Click an example button to load sample real-world alignments of query genes against reference (A) and non-reference (B) genomes.</p>
+            <p>These examples show how a single SLAC can show hit completeness and polymorphisms relative to the query's coding and non-coding structure, with the possibility of gene-scale abbreviated previews fitting within common interfaces.</p>
+        </div>
+
+        <!-- Right column: Buttons for loading examples -->
+        <div class="col-md-4 d-flex flex-column align-items-center">
+            <button id="load-example-a" class="btn btn-secondary mb-2">Load Example A</button>
+            <button id="load-example-b" class="btn btn-secondary">Load Example B</button>
+        </div>
+    </div>
+</section>
+
+
+<!-- Tabs for input modes with descriptions -->
+<section class="container">
+    <div class="card">
+        <div class="card-body">
+            <ul class="nav nav-tabs" id="inputTabs" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active" id="per-sequence-tab" data-bs-toggle="tab" href="#per-sequence" role="tab" aria-controls="per-sequence" aria-selected="true">Per Sequence</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="fasta-text-tab" data-bs-toggle="tab" href="#fasta-text" role="tab" aria-controls="fasta-text" aria-selected="false">FASTA Text</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="fasta-upload-tab" data-bs-toggle="tab" href="#fasta-upload" role="tab" aria-controls="fasta-upload" aria-selected="false">FASTA Upload</a>
+                </li>
+            </ul>
+
+            <div class="tab-content mt-3" id="inputTabContent">
+                <!-- Per Sequence Tab -->
+                <div class="tab-pane fade show active" id="per-sequence" role="tabpanel" aria-labelledby="per-sequence-tab">
+                    <p>Please enter the genomic, coding, and hit sequences below. The genomic and hit sequences are essential and must be aligned. The coding sequence is optional. If an unaligned coding sequence is provided, a simpler kmer matching algorithm will attempt to align it based on the assumption that the complete and exact CDS, with potential gaps, is contained within the genomic sequence.</p>
+                    <div class="mb-3">
+                        <label for="genomic_seq" class="form-label">Genomic Sequence</label>
+                        <input type="text" class="form-control" id="genomic_seq" placeholder="Enter genomic sequence">
+                    </div>
+                    <div class="mb-3">
+                        <label for="coding_seq" class="form-label">Coding Sequence</label>
+                        <input type="text" class="form-control" id="coding_seq" placeholder="Enter coding sequence">
+                    </div>
+                    <div class="mb-3">
+                        <label for="hit_seq" class="form-label">Hit Sequence</label>
+                        <input type="text" class="form-control" id="hit_seq" placeholder="Enter hit sequence">
+                    </div>
+                    <button id="process-per-sequence" class="btn btn-primary w-100">Process</button>
+                </div>
+
+                <!-- FASTA Text Tab -->
+                <div class="tab-pane fade" id="fasta-text" role="tabpanel" aria-labelledby="fasta-text-tab">
+                    <p>Paste 2 to 3 aligned FASTA sequences. They must be ordered as genomic, coding (optional) then hit. Please ensure each sequence has a definition line starting with a carat.</p>
+                    <div class="mb-3">
+                        <label for="fasta_text" class="form-label">FASTA Input</label>
+                        <textarea class="form-control" id="fasta_text" rows="5" placeholder="Paste your aligned FASTA sequences here"></textarea>
+                    </div>
+                    <button id="process-fasta-text" class="btn btn-primary w-100">Process</button>
+                </div>
+
+                <!-- FASTA Upload Tab -->
+                <div class="tab-pane fade" id="fasta-upload" role="tabpanel" aria-labelledby="fasta-upload-tab">
+                    <p>Upload a FASTA file with the following aligned sequences in this order: genomic, coding (optional), hit.</p>
+                    <div class="mb-3">
+                        <label for="fasta_file" class="form-label">Upload FASTA File</label>
+                        <input type="file" class="form-control" id="fasta_file">
+                    </div>
+                    <button id="process-fasta-upload" class="btn btn-primary w-100">Process</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Customization options (Slider for miniSLAC length) -->
+<section class="container my-4">
+    <div class="card">
+        <div class="card-body">
+            <h3>miniSLAC Length</h3>
+            <p>The miniSLAC length parameter defines how many characters it is abbreviated to. The default is 50, but you can choose a value between 10 and 200.</p>
+            <div class="d-flex align-items-center">
+                <input type="range" class="form-range" id="minislac_length" min="10" max="200" value="50" oninput="updateNumberInput(this.value)">
+                <input type="number" id="minislac_length_input" class="form-control mx-3" style="width: 80px;" min="10" max="200" value="50" oninput="updateSliderInput(this.value)">
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Results Section -->
+<section class="container my-4">
+    <div class="card">
+        <div class="card-body">
+            <h3>miniSLAC</h3>
+            <p>This is the abbreviated SLAC, ideal for thumbnail previews to aid efficient navigation of large datasets within standard interfaces.</p>
+            <pre id="minislac_output" class="bg-light p-3" style="font-family: 'Courier New';"></pre>
+            <button id="copy-minislac" class="btn btn-secondary">Copy miniSLAC Output</button>
+        </div>
+    </div>
+
+    <div class="card mt-4">
+        <div class="card-body">
+            <h3>fullSLAC</h3>
+            <p>This output displays the full length SLAC sequence without abbreviation. It may be useful for cases where a single, text-based, high resolution structure of a hit alignment relative to the query gene is needed.</p>
+            <textarea id="fullslac_output" class="form-control" rows="8" style="font-family: 'Courier New';"></textarea>
+            <button id="copy-fullslac" class="btn btn-secondary mt-2">Copy fullSLAC Output</button>
+        </div>
+    </div>
+
+    <div class="card mt-4">
+        <div class="card-body">
+            <h3>seqSLAC</h3>
+            <p>A hybrid of fullSLAC and the query sequence, all matching positions retain their original sequence character, with case used to convey coding vs non-coding regions.</p>
+            <textarea id="seqslac_output" class="form-control" rows="8" style="font-family: 'Courier New';"></textarea>
+            <button id="copy-seqslac" class="btn btn-secondary mt-2">Copy seqSLAC Output</button>
+        </div>
+    </div>
+</section>
+
+<!-- Python Code Example Section -->
+<section class="container my-4">
+    <div class="card">
+        <div class="card-body">
+            <h3>Python Code Example</h3>
+            <p>Thinking of using SLAC in your pipeline? Example Python code for its use is shown below:</p>
+            <pre class="bg-light p-3" style="font-family: 'Courier New'; color: black;">
+from slac import SLAC
+
+slac_seq = SLAC(genomic="ATG...", cds="ATG...", hit="ATT...")
+
+slac_seq  # miniSLAC is the default string representation
+
+# --- Other representations ---
+slac_seq.full()  # fullSLAC representation
+slac_seq.full(encoded_hit=True)  # seqSLAC representation
+            </pre>
+        </div>
+    </div>
+</section>
+
+<!-- Licensing and Usage Info -->
+<section class="container my-4">
+    <div class="card">
+        <div class="card-body">
+            <h3>Usage & Licensing Information</h3>
+            <p>SLAC and this website are licenced under the Apache 2.0 licence. Please cite the <a href="https://github.com/ryanzujic/slac">primary SLAC repository</a> if either resource is used in your work.</p>
+        </div>
+    </div>
+</section>
+
+<!-- External JavaScript -->
+<script src="main.js"></script>
+<!-- Bootstrap JS for Tab Functionality -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
 </body>
 </html>
