@@ -18,11 +18,11 @@ document.getElementById('load-example-b').addEventListener('click', () => {
 
 // Helper functions for sliders and inputs
 function updateNumberInput(value) {
-    document.getElementById('minislac_length_input').value = value;
+    document.getElementById('mini_slac_length_input').value = value;
 }
 
 function updateSliderInput(value) {
-    const slider = document.getElementById('minislac_length');
+    const slider = document.getElementById('mini_slac_length');
     const numericValue = parseInt(value);
     if (numericValue >= slider.min && numericValue <= slider.max) {
         slider.value = numericValue;
@@ -34,6 +34,7 @@ document.getElementById('process-per-sequence').addEventListener('click', async 
     const hit_seq = document.getElementById('hit_seq').value.trim();
     const full_ref_seq = document.getElementById('genomic_seq').value.trim();
     const ref_context_seq = document.getElementById('coding_seq').value.trim();
+    const mini_slac_length = document.getElementById('mini_slac_length').value;
 
     updateLog('Processing... Please wait.', 'info');
 
@@ -42,7 +43,7 @@ document.getElementById('process-per-sequence').addEventListener('click', async 
         const response = await fetch('https://slacserver.vercel.app/slac-3-input', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ hit_seq, full_ref_seq, ref_context_seq })
+            body: JSON.stringify({ hit_seq, full_ref_seq, ref_context_seq, mini_slac_length })
         });
 
         const endTime = performance.now();
@@ -64,6 +65,7 @@ document.getElementById('process-per-sequence').addEventListener('click', async 
 
 document.getElementById('process-fasta-text').addEventListener('click', async () => {
     const fasta_text = document.getElementById('fasta_text').value.trim();
+    const mini_slac_length = document.getElementById('mini_slac_length').value;
 
     updateLog('Processing... Please wait.', 'info');
 
@@ -72,7 +74,7 @@ document.getElementById('process-fasta-text').addEventListener('click', async ()
         const response = await fetch('https://slacserver.vercel.app/slac-paste-fasta', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ fasta_text })
+            body: JSON.stringify({ fasta_text, mini_slac_length })
         });
 
         const endTime = performance.now();
@@ -94,6 +96,7 @@ document.getElementById('process-fasta-text').addEventListener('click', async ()
 
 document.getElementById('process-fasta-upload').addEventListener('click', async () => {
     const fasta_file = document.getElementById('fasta_file').files[0];
+    const mini_slac_length = document.getElementById('mini_slac_length').value;
 
     if (!fasta_file) {
         alert('Please upload a FASTA file.');
@@ -101,7 +104,9 @@ document.getElementById('process-fasta-upload').addEventListener('click', async 
     }
 
     const formData = new FormData();
-    formData.append('fasta_file', fasta_file);
+    formData.append('fasta_file', fasta_file);  // Append the file
+    formData.append('mini_slac_length', mini_slac_length);  // Append the mini_slac_length
+
 
     updateLog('Processing... Please wait.', 'info');
 

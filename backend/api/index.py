@@ -24,6 +24,7 @@ def slac_3_input():
     hit_seq = data.get('hit_seq')
     full_ref_seq = data.get('full_ref_seq')
     ref_context_seq = data.get('ref_context_seq')
+    mini_slac_length = request.form.get('mini_slac_length')
 
     if hit_seq:
         hit_seq = sanitise_string(hit_seq)
@@ -32,7 +33,8 @@ def slac_3_input():
     if ref_context_seq:
         ref_context_seq = sanitise_string(ref_context_seq)
 
-    return process_sequences(hit_seq=hit_seq, full_ref_seq=full_ref_seq, ref_context_seq=ref_context_seq)
+    return process_sequences(hit_seq=hit_seq, full_ref_seq=full_ref_seq, ref_context_seq=ref_context_seq,
+                             mini_slac_length=mini_slac_length)
 
 # Route for FASTA text input method
 @app.route('/slac-paste-fasta', methods=['POST'])
@@ -40,6 +42,7 @@ def slac_paste_fasta():
     # Ingest JSON input from request
     data = request.get_json()
     fasta_text = data.get('fasta_text')
+    mini_slac_length = request.form.get('mini_slac_length')
 
     try:
         sequences = read_fasta_lines(fasta_text.split('\n'))
@@ -49,7 +52,7 @@ def slac_paste_fasta():
     if not sequences:
         return jsonify({'error': 'No labelled sequences found in FASTA text'})
 
-    return slac_process_fasta_sequences(sequences)
+    return slac_process_fasta_sequences(sequences, mini_slac_length)
 
 
 # Route for FASTA file upload method
@@ -58,6 +61,7 @@ def slac_upload_fasta():
 
     # Ingest the uploaded file from the request
     fasta_file = request.files.get('fasta_file')
+    mini_slac_length = request.form.get('mini_slac_length')
 
     try:
         sequences = read_fasta_file(fasta_file)
@@ -67,13 +71,14 @@ def slac_upload_fasta():
     if not sequences:
         return jsonify({'error': 'No labelled sequences found in FASTA file'})
 
-    return slac_process_fasta_sequences(sequences)
+    return slac_process_fasta_sequences(sequences, mini_slac_length)
 
-def slac_process_fasta_sequences(sequences):
+def slac_process_fasta_sequences(sequences, mini_slac_length):
     """
     Process a list of sequences from a FASTA file or text input, and return the json resultst
     Args:
         sequences: List of dictionaries, each containing a single sequence ID and sequence
+        length: (int) The length of the miniSLAC output
     """
     full_ref_seq = None
     ref_context_seq = None
@@ -86,7 +91,7 @@ def slac_process_fasta_sequences(sequences):
     else:
         return jsonify({'error': f'Incorrect number of sequences in FASTA input. Expected 2 or 3, got {len(sequences)}'})
 
-    return process_sequences(hit_seq=hit_seq, full_ref_seq=full_ref_seq, ref_context_seq=ref_context_seq)
+    return process_sequences(hit_seq=hit_seq, full_ref_seq=full_ref_seq, ref_context_seq=ref_context_seq, mini_slac_length=mini_slac_length)
 
 
 def sanitise_string(input_string):
@@ -116,6 +121,8 @@ def read_fasta_lines(fasta_lines):
         if not line.strip():
             continue
 
+        line = sanitise_string(line)
+
         if line.startswith('>'):
             # Store the previous sequence if it exists
             if current_seq_name:
@@ -136,12 +143,25 @@ def read_fasta_lines(fasta_lines):
     return seqs
 
 
-def process_sequences(hit_seq, full_ref_seq, ref_context_seq):
+def process_sequences(hit_seq, full_ref_seq, ref_context_seq, mini_slac_length):
+    """
+    Process the sequences and return the SLAC results as a JSON response.
+
+    Args:
+        hit_seq: (str) The aligned hit sequence
+        full_ref_seq: (str) The aligned reference sequence (ie, genomic)
+        ref_context_seq: (str) The reference context sequence (ie, CDS, may be unaligned)
+        mini_slac_length: (int) The length of the miniSLAC output
+
+    Returns:
+        JSON response containing the full SLAC output, the sequence-only SLAC output, the miniSLAC output, and the processing
+        time in seconds.
+    """
 
     start_time = time.time()
 
     try:
-        slac = SLAC(genomic=full_ref_seq, cds=ref_context_seq, hit=hit_seq, auto_align_cds_to_genomic=True)
+        slac = SLAC(genomic=full_ref_seq, cds=ref_context_seq, hit=hit_seq, auto_align_cds_to_genomic=True, size_limit=mini_slac_length)
     except Exception as e:
         return jsonify({'error': f"Error processing SLAC."})
 
