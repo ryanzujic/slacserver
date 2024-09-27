@@ -48,8 +48,15 @@ document.getElementById('process-per-sequence').addEventListener('click', async 
         const endTime = performance.now();
         const elapsedTime = (endTime - startTime).toFixed(2);
 
+        // Log the raw response before parsing it
+        const responseText = await response.text();  // DEBUG
+        console.log('Raw response:', responseText);  // DEBUG
+
         if (response.ok) {
-            const data = await response.json();
+            // Attempt to parse the JSON
+            const data = JSON.parse(responseText); // TODO - Replace with line below and remove debugging once working
+
+            // const data = await response.json();
             updateLog(`Finished in ${elapsedTime} ms`, 'success');
             displayResults(data);
         } else {
