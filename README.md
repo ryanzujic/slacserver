@@ -4,4 +4,4 @@ This repo contains the code used for the SLAC server front and back end. The ser
 
 For further information about SLAC and to download it for offline usage, a direct link to the repo will be provided soon.
 
-To view the SLAC Preview site: https://ryanzujic.github.io/slacserver/
+To view the SLAC Preview site: https://ryanzujic.github.io/slacweb/
