@@ -31,14 +31,15 @@
     <div class="row mt-3">
         <!-- Left column: Text description about examples -->
         <div class="col-md-8">
-            <p>No sequences on hand? Click an example button to load sample real-world alignments of query genes against reference (A) and non-reference (B) genomes.</p>
-            <p>These examples show how a single SLAC can show hit completeness and polymorphisms relative to the query's coding and non-coding structure, with the possibility of gene-scale abbreviated previews fitting within common interfaces.</p>
+            <p>The examples below show a ### bp long genomic query sequence with a single exon and UTRs included, aligned to a hit locus in a soybean reference (A) and non-reference (B) genome.</p>
+            <p>SLAC previews of example A show the gene's structure at a glance.</p>
+            <p>Example B is a non-reference hit to the same query. SLAC outputs show polymorphism types and locations, relative to the query's structure. The miniSLAC would enrich a researcher's initial understanding of the hit beyond metrics such as its 99.6% CDS identity.</p>
         </div>
 
         <!-- Right column: Buttons for loading examples -->
         <div class="col-md-4 d-flex flex-column align-items-center">
-            <button id="load-example-a" class="btn btn-secondary mb-2">Load Example A</button>
-            <button id="load-example-b" class="btn btn-secondary">Load Example B</button>
+            <button id="load-example-a" class="btn btn-secondary mb-2">Load Example A: Query gene with single exon and UTRs, reference genome hit</button>
+            <button id="load-example-b" class="btn btn-secondary">Load Example B: Same query, non-reference genome hit<br />99.6% identity to CDS, large deletion in 5' UTR'.</button>
         </div>
     </div>
 </section>
@@ -180,6 +181,16 @@ slac_seq.full(encoded_hit=True)  # seqSLAC representation
         <div class="card-body">
             <h3>Usage & Licensing Information</h3>
             <p>SLAC and this website are licenced under the Apache 2.0 licence. Please cite the <a href="https://github.com/ryanzujic/slac">primary SLAC repository</a> if either resource is used in your work.</p>
+        </div>
+    </div>
+</section>
+
+<!-- References -->
+<section class="container my-4">
+    <div class="card">
+        <div class="card-body">
+            <h3>Source Data</h3>
+            <p>Example hits are derived from the reference and wild soybean genome assemblies glyma.Wm82.gnm4 and glyso.PI483463.gnm1, respectively, by <a href="https://doi.org/10.1111/tpj.14500">Valliyodan et al. 2019</a>.</p>
         </div>
     </div>
 </section>
