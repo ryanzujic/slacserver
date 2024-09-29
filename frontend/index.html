@@ -33,10 +33,10 @@
     <div class="row">
         <div class="col-12 text-center">
             <h4>Introduction to SLAC (Single Line Alignment with Context)</h4>
-            <p>Single Line Alignment with Context (SLAC) is a system designed to aid users of genetics/genomics workflows to intuitively understand DNA-to-DNA hits relative to a query gene coding and non-coding structure, with extremely compact, plain-text previews.</p>
-            <img src="images/minislac_header.jpg" alt="miniSLAC header image" width="800">
+            <p>Single Line Alignment with Context (SLAC) is a system designed to aid users of genetics/genomics workflows to intuitively understand DNA-to-DNA hits relative to a query gene coding and non-coding structure, with extremely compact, plain-text previews - compatible with everything from spreadsheets to contextual hover text in plots.</p>
+            <img src="images/minislac_simple_example.png" alt="miniSLAC header image" width="600">
             <p></p>
-            <p>For use in your own pipelines and more technical information, please see the <a href="https://github.com/ryanzujic/slac">standalone SLAC repository</a>.</p>
+            <p>For use in your own pipelines and more technical information, please see the <a href="https://github.com/ryanzujic/slac">standalone SLAC repository</a> (in progress).</p>
         </div>
     </div>
 
@@ -44,12 +44,15 @@
     <div class="row mt-4">
         <div class="col-12">
             <p class="text-center">
-                Don't have your own sequences at hand?<br />Try out the two examples below, demonstrating hits against a ~1300 bp query gene comprised of two exons and both 5' and 3' UTRs.
+                Don't have your own sequences at hand?<br />Try out the examples based on the graphics. These demonstrate an identical and variant hit against a ~1400 bp query gene comprised of two exons and both 5' and 3' UTRs.
             </p>
             <ul class="list-unstyled text-center">
                 <li><strong>Example A:</strong> Query gene aligned to a reference soybean genome. All positions match, and SLAC outputs enable convenient communication of the gene’s structure.</li>
                 <li><strong>Example B:</strong> Query gene aligned to a non-reference genome hit. 99.6% identity to CDS, with extensive non-coding polymorphisms, including a large deletion within the 5' UTR.</li>
             </ul>
+            <p class="text-center">
+                Adjust the length slider to understand how miniSLACs can be tailored to fit within your space constraints.
+            </p>
         </div>
 
         <!-- Buttons aligned centrally for loading examples -->
