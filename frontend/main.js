@@ -82,6 +82,11 @@ function scrollToResults() {
     const miniSlacCard = document.querySelector('#minislac_output');
     const logAlert = document.querySelector('#log_output');
 
+    if (!logAlert || !miniSlacCard) {
+        console.warn('Unable to get miniSLAC or log elements');
+        return;
+    }
+    
     // Scroll to the log and output if neither is currently in view
     if (!isInViewport(miniSlacCard) && !isInViewport(logAlert)) {
         logAlert.scrollIntoView({ behavior: 'smooth', block: 'center' });
