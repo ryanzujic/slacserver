@@ -86,15 +86,15 @@
                 <div class="tab-pane fade show active" id="per-sequence" role="tabpanel" aria-labelledby="per-sequence-tab">
                     <p>Please enter the genomic, coding, and hit sequences below. The genomic and hit sequences are essential and must be aligned. The coding sequence is optional. If an unaligned coding sequence is provided, a simpler kmer matching algorithm will attempt to align it based on the assumption that the complete and exact CDS, with potential gaps, is contained within the genomic sequence.</p>
                     <div class="mb-3">
-                        <label for="genomic-seq" class="form-label">Genomic Sequence</label>
+                        <label for="genomic-seq" class="form-label">Aligned Genomic Sequence</label>
                         <input type="text" class="form-control" id="genomic-seq" placeholder="Enter genomic sequence">
                     </div>
                     <div class="mb-3">
-                        <label for="coding-seq" class="form-label">Coding Sequence</label>
+                        <label for="coding-seq" class="form-label">Coding Sequence (Optional, preferably aligned)</label>
                         <input type="text" class="form-control" id="coding-seq" placeholder="Enter coding sequence">
                     </div>
                     <div class="mb-3">
-                        <label for="hit-seq" class="form-label">Hit Sequence</label>
+                        <label for="hit-seq" class="form-label">Aligned Hit Sequence</label>
                         <input type="text" class="form-control" id="hit-seq" placeholder="Enter hit sequence">
                     </div>
                     <button id="process-per-sequence" class="btn btn-primary w-100">Process</button>

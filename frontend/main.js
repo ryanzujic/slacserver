@@ -107,7 +107,10 @@ document.getElementById('process-per-sequence').addEventListener('click', async 
 
         if (response.ok) {
             const data = await response.json();
-            updateLog(`Finished in ${elapsedTime} ms`, 'success');
+            if (data.error) {
+                throw new Error(data.error);
+            }
+            updateLog(`Finished`, 'success');
             displayResults(data);
         } else {
             throw new Error(`Server returned status: ${response.status} ${response.statusText}`);
@@ -145,6 +148,9 @@ document.getElementById('process-fasta-text').addEventListener('click', async ()
 
         if (response.ok) {
             const data = await response.json();
+            if (data.error) {
+                throw new Error(data.error);
+            }
             updateLog('Finished', 'success');
             displayResults(data);
         } else {
@@ -191,6 +197,9 @@ document.getElementById('process-fasta-upload').addEventListener('click', async 
 
         if (response.ok) {
             const data = await response.json();
+            if (data.error) {
+                throw new Error(data.error);
+            }
             updateLog('Finished', 'success');
             displayResults(data);
         } else {
