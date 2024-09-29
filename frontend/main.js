@@ -229,7 +229,7 @@ document.getElementById('mini-slac-length').addEventListener('change', async () 
     refreshOutputsOnLengthChange();
 });
 
-// Clear page on refresh
+// Clear page on refresh and handle version display
 window.addEventListener('DOMContentLoaded', () => {
     // Reset input fields and text areas
     document.getElementById('genomic-seq').value = '';
@@ -255,4 +255,10 @@ window.addEventListener('DOMContentLoaded', () => {
     // Reset to the default tab
     const defaultTab = new bootstrap.Tab(document.getElementById('per-sequence-tab'));
     defaultTab.show();
+
+    // Display the version from config.js
+    const versionElement = document.getElementById('app-version');
+    if (versionElement) {
+        versionElement.textContent = appConfig.version;
+    }
 });
