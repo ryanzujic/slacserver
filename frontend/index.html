@@ -35,15 +35,20 @@
             <h4>Introduction to SLAC (Single Line Alignment with Context)</h4>
             <p>Single Line Alignment with Context (SLAC) is a system to display DNA alignments of hits to their query gene's coding and non-coding structure, with extremely compact, plain-text previews.<br />These are ideal 'thumbnails' for everything from spreadsheet workflows to hover text in PAV matrices.</p>
             <img src="images/minislac_simple_example.png" alt="miniSLAC header image" width="600">
-            <p></p>
-            <p>For use in your own pipelines and more technical information, please see the <a href="https://github.com/ryanzujic/slac">standalone SLAC repository</a> (in progress).</p>
         </div>
     </div>
 
     <!-- Section with examples description and buttons -->
-    <div class="row mt-4">
+    <div class="row mt-2">
         <div class="col-12">
-            <p class="text-center">
+            <!-- Buttons aligned centrally for loading examples -->
+            <div class="col-12 d-flex justify-content-center mt-4">
+                <div class="btn-group">
+                    <button id="load-example-a" class="btn btn-secondary">Load Example A: Reference</button>
+                    <button id="load-example-b" class="btn btn-secondary">Load Example B: Variant</button>
+                </div>
+            </div>
+            <p class="text-center mt-2">
                 Don't have your own sequences at hand? Try out the examples based on the graphic above.
             </p>
             <ul class="list-unstyled text-center">
@@ -53,14 +58,6 @@
             <p class="text-center">
                 Adjust the length slider to understand how miniSLACs can be tailored to fit within your space constraints.
             </p>
-        </div>
-
-        <!-- Buttons aligned centrally for loading examples -->
-        <div class="col-12 d-flex justify-content-center mt-4">
-            <div class="btn-group">
-                <button id="load-example-a" class="btn btn-secondary">Load Example A: Reference</button>
-                <button id="load-example-b" class="btn btn-secondary">Load Example B: Variant</button>
-            </div>
         </div>
     </div>
 </section>
@@ -201,7 +198,8 @@ slac_seq.full(encoded_hit=True)  # seqSLAC representation
     <div class="card">
         <div class="card-body">
             <h3>Usage & Licensing Information</h3>
-            <p>SLAC and this website are licenced under the Apache 2.0 licence. Please cite the <a href="https://github.com/ryanzujic/slac">primary SLAC repository</a> if either resource is used in your work.</p>
+            <p>For use in your own pipelines and more technical information, please see the <a href="https://github.com/ryanzujic/slac">standalone SLAC repository</a> (in progress).</p>
+            <p>SLAC and this website are licenced under the Apache 2.0 licence. Please cite the standalone SLAC repository if either resource is used in your work.</p>
         </div>
     </div>
 </section>
