@@ -63,6 +63,11 @@ function refreshOutputsOnLengthChange() {
 
 // Function to check if an element is in view
 function isInViewport(element) {
+    if (!element) {
+        console.warn('Element is null or undefined');
+        return false;
+    }
+
     const rect = element.getBoundingClientRect();
     return (
         rect.top >= 0 &&
