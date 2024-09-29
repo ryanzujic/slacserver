@@ -1,7 +1,8 @@
-# Single Line Alignment with Context (SLAC) - Preview Server
+# Single Line Alignment with Context (SLAC) - Interactive Website
 
-This repo contains the code used for the SLAC server front and back end. The server and interface aims to provide a simple, interactive demonstration of SLACs usage in the representation of alignments of DNA sequence alignments.
+Please view this site via: https://ryanzujic.github.io/slacweb/
 
-For further information about SLAC and to download it for offline usage, a direct link to the repo will be provided soon.
+This repo contains the website's source code.
 
-To view the SLAC Preview site: https://ryanzujic.github.io/slacweb/
+The source code for standalone SLAC for Python is available at: https://github.com/ryanzujic/slac
+
