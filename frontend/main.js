@@ -75,7 +75,7 @@ function isInViewport(element) {
 // Function to scroll to the miniSLAC card and log if not in view
 function scrollToResults() {
     try {
-        const miniSlacCard = document.querySelector('#minislac-output');
+        const miniSlacCard = document.querySelector('#mini-slac-output')
         const logAlert = document.querySelector('#log-alert');
 
         // Scroll to the log and output if neither is currently in view
