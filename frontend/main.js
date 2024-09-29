@@ -79,17 +79,22 @@ function isInViewport(element) {
 
 // Function to scroll to the miniSLAC card and log if not in view
 function scrollToResults() {
-    const miniSlacCard = document.querySelector('#minislac_output');
-    const logAlert = document.querySelector('#log_output');
+    try {
+        const miniSlacCard = document.querySelector('#minislac_output');
+        const logAlert = document.querySelector('#log_output');
 
-    if (!logAlert || !miniSlacCard) {
-        console.warn('Unable to get miniSLAC or log elements');
-        return;
-    }
-    
-    // Scroll to the log and output if neither is currently in view
-    if (!isInViewport(miniSlacCard) && !isInViewport(logAlert)) {
-        logAlert.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        // Check if elements exist before attempting to scroll
+        if (!miniSlacCard || !logAlert) {
+            console.warn('One or more elements not found: miniSlacCard or logAlert.');
+            return;
+        }
+
+        // Scroll to the log and output if neither is currently in view
+        if (!isInViewport(miniSlacCard) && !isInViewport(logAlert)) {
+            logAlert.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+    } catch (error) {
+        console.error('Error during scroll to results:', error);
     }
 }
 
