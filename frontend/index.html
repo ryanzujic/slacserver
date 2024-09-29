@@ -10,12 +10,11 @@
     <script src="https://unpkg.com/@tabler/core@latest/dist/js/tabler.min.js" defer></script>
     <!-- Tabler Icons from CDN -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
-
     <style>
-        /* Custom Tabler Color Theme */
+        /* Minor theme overrides */
         :root {
-            --tblr-primary: #58247a;       /* Light blue */
-            --tblr-secondary: #91298a;     /* Green */
+            --tblr-primary: #58247a;
+            --tblr-secondary: #91298a;
         }
     </style>
 </head>
@@ -24,7 +23,7 @@
 <!-- Header -->
 <header class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container">
-        <h1 class="navbar-brand">SLAC Alignment Preview Tool</h1>
+        <h1 class="navbar-brand">SLAC: Gene Alignment Preview Tool</h1>
     </div>
 </header>
 
@@ -34,11 +33,9 @@
     <div class="row">
         <div class="col-12 text-center">
             <h4>Introduction to SLAC (Single Line Alignment with Context)</h4>
-            <p>Single Line Alignment with Context (SLAC) is a system designed to aid users of genetics/genomics workflows to intuitively understand hits relative to a query gene coding and non-coding structure, with extremely compact, plain-text previews.</p>
-
+            <p>Single Line Alignment with Context (SLAC) is a system designed to aid users of genetics/genomics workflows to intuitively understand DNA-to-DNA hits relative to a query gene coding and non-coding structure, with extremely compact, plain-text previews.</p>
             <img src="images/minislac_header.jpg" alt="miniSLAC header image" width="800">
             <p></p>
-
             <p>For use in your own pipelines and more technical information, please see the <a href="https://github.com/ryanzujic/slac">standalone SLAC repository</a>.</p>
         </div>
     </div>
@@ -215,17 +212,6 @@ slac_seq.full(encoded_hit=True)  # seqSLAC representation
         </div>
     </div>
 </section>
-
-<!-- Include config.js and display the version -->
-<script src="config.js"></script>
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
-        const versionElement = document.getElementById('app-version');
-        if (versionElement) {
-            versionElement.textContent = appConfig.version;
-        }
-    });
-</script>
 
 <!-- Footer Section -->
 <footer class="footer footer-transparent d-print-none">

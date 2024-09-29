@@ -18,18 +18,18 @@ let miniSlacLength = null;
 // Load Example A - Pre-fill sequences and trigger process
 document.getElementById('load-example-a').addEventListener('click', () => {
     document.getElementById('per-sequence-tab').click();
-    document.getElementById('genomic-seq').value = EXAMPLE_A_GENOMIC_SEQ;  // Example A genomic
-    document.getElementById('coding-seq').value = EXAMPLE_A_CODING_SEQ;   // Example A coding
-    document.getElementById('hit-seq').value = EXAMPLE_A_HIT_SEQ;         // Example A hit
+    document.getElementById('genomic-seq').value = EXAMPLE_A_GENOMIC_SEQ;
+    document.getElementById('coding-seq').value = EXAMPLE_A_CODING_SEQ;
+    document.getElementById('hit-seq').value = EXAMPLE_A_HIT_SEQ;
     document.getElementById('process-per-sequence').click();
 });
 
 // Load Example B - Pre-fill sequences and trigger process
 document.getElementById('load-example-b').addEventListener('click', () => {
     document.getElementById('per-sequence-tab').click();
-    document.getElementById('genomic-seq').value = EXAMPLE_B_GENOMIC_SEQ;  // Example B genomic
-    document.getElementById('coding-seq').value = EXAMPLE_B_CODING_SEQ;   // Example B coding
-    document.getElementById('hit-seq').value = EXAMPLE_B_HIT_SEQ;         // Example B hit
+    document.getElementById('genomic-seq').value = EXAMPLE_B_GENOMIC_SEQ;
+    document.getElementById('coding-seq').value = EXAMPLE_B_CODING_SEQ;
+    document.getElementById('hit-seq').value = EXAMPLE_B_HIT_SEQ;
     document.getElementById('process-per-sequence').click();
 });
 
@@ -107,7 +107,7 @@ document.getElementById('process-per-sequence').addEventListener('click', async 
 
         if (response.ok) {
             const data = await response.json();
-            if (data.error) {
+            if (data.error !== undefined && data.error) {
                 throw new Error(data.error);
             }
             updateLog(`Finished`, 'success');
@@ -148,7 +148,7 @@ document.getElementById('process-fasta-text').addEventListener('click', async ()
 
         if (response.ok) {
             const data = await response.json();
-            if (data.error) {
+            if (data.error !== undefined && data.error) {
                 throw new Error(data.error);
             }
             updateLog('Finished', 'success');
@@ -197,7 +197,7 @@ document.getElementById('process-fasta-upload').addEventListener('click', async 
 
         if (response.ok) {
             const data = await response.json();
-            if (data.error) {
+            if (data.error !== undefined && data.error) {
                 throw new Error(data.error);
             }
             updateLog('Finished', 'success');
@@ -265,7 +265,7 @@ window.addEventListener('DOMContentLoaded', () => {
     const defaultTab = new bootstrap.Tab(document.getElementById('per-sequence-tab'));
     defaultTab.show();
 
-    // Display the version from config.js
+    // Display the version
     const versionElement = document.getElementById('app-version');
     if (versionElement) {
         versionElement.textContent = appConfig.version;
