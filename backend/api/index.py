@@ -21,10 +21,10 @@ def after_request(response):
 def slac_3_input():
     # Ingest JSON input from request
     data = request.get_json()
-    hit_seq = data.get('hit_seq')
-    full_ref_seq = data.get('full_ref_seq')
-    ref_context_seq = data.get('ref_context_seq')
-    mini_slac_length = data.get('mini_slac_length')
+    hit_seq = data.get('hitSeq')
+    full_ref_seq = data.get('fullRefSeq')
+    ref_context_seq = data.get('refContextSeq')
+    mini_slac_length = data.get('miniSlacLength')
 
     if hit_seq:
         hit_seq = sanitise_string(hit_seq)
@@ -41,8 +41,8 @@ def slac_3_input():
 def slac_paste_fasta():
     # Ingest JSON input from request
     data = request.get_json()
-    fasta_text = data.get('fasta_text')
-    mini_slac_length = data.get('mini_slac_length')
+    fasta_text = data.get('fastaText')
+    mini_slac_length = data.get('miniSlacLength')
 
     try:
         sequences = read_fasta_lines(fasta_text.split('\n'))
@@ -60,8 +60,8 @@ def slac_paste_fasta():
 def slac_upload_fasta():
 
     # Ingest the uploaded file from the request
-    fasta_file = request.files.get('fasta_file')
-    mini_slac_length = request.form.get('mini_slac_length')
+    fasta_file = request.files.get('fastaFile')
+    mini_slac_length = request.form.get('miniSlacLength')
 
     try:
         sequences = read_fasta_file(fasta_file)

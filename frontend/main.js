@@ -1,50 +1,94 @@
 // Example of a gene's hit against its source (reference) genome
-const dna_example_a_genomic = 'TGAATATTATTCTAATTTAACTAATGGCCTTAAACTTGGATACTTATGCAATTAATTAAGTTAGATACTTCAGAAAGAGAACTTTAACTATCCTAATAATCATATTCAAGTCAAACAAGATTCTATTTCCTAGAATATACATGCGAAGTAAAAAAAATGACACTATAATTGATTTTAGCATTTATTATATTTTATCATCATTGAGTGAGACTAATTTTGCTCTTATAAAAACATTTATGCCATACCAATCGACCCCATTTAAGGTTGATGATAGTGCAGCCATGCAGGGAAAGTAAACCCAAATAATAGTACGAAGTAGCTAGGCATAAAAAACTTCAAACAATATATTGTTCTCCCACTATCTAAAAACAAGAAGCCCGGCCCCCATTTTGTGGAGACCACGTATATACTCCAGTAAACAAAAGATATTTAGTCCTCAAATTAACTTTATCCCATGTCAGTGTATGGTATATTCTTAATAATTTTTTGCGGGGTACCCTCACATCATATGAATTTCTCCTTTTTTTTTGTATACCTCAAAACATGTGTTTTCCTTAATATTGCCATAAGCTAACAAAAGCATGGTAGCTAATACTTTTTCTCGATCTAAACCTGCATGTTTACCACTTTCATGAAACAAAAACTATGAACTATTCTTCGGGCTTTTTCATCATTCTTCTTCTGCTGCTATCCCATTTCTTCCCATATTCAAGCTCGAGCATGAGAATAATGATTCAGCAAGTCACCAAAGCAGCAACAGAAAATCACCATCACATGGTAAGTATATAATTTCTTTGATATGATCCGTAATCACTTTTTATTTTTTATAAGCAAGAGGAGCTTTTAAGTTCCTATCATGTTTTCTCTTCTTTTTTTTTTTTGGGTGAAGTTATCATGTTTTCTTTCGTGCCAGTCAAGAGGAGCTGAGAGGGATCATGTTCAAAGGAAAGCATTGCATGAAGTACACTCAGGACCTAATCCTATCAGTAACTCCATTCCACAACAGAAGTTGAAAAATATACAAAGAAATCATATGCATTAGGTCTTCTTTTGTATGTTAATTATTTTTTCCTTTTCTGTTCTTTGTTCTTTCTTTCCCTCCCTTCCTCATATTTGTTACACATATTTCATGAGTCAGCTTTGAATCATGCATAATGAATCTACATTCAGATTGATGCATAACTATAGCTAGCATGACCATCTTCAGTTCTTCACTCTTTTCATTGTGTTATACTGTTATTATCCCTCCCTCCCTCCCTCCCTCCCTCATTTTTCTTTGCGTATAAATTTCAAT'
-const dna_example_a_coding = '---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ATGAACTATTCTTCGGGCTTTTTCATCATTCTTCTTCTGCTGCTATCCCATTTCTTCCCATATTCAAGCTCGAGCATGAGAATAATGATTCAGCAAGTCACCAAAGCAGCAACAGAAAATCACCATCACAT----------------------------------------------------------------------------------------------------------------------------------------GTCAAGAGGAGCTGAGAGGGATCATGTTCAAAGGAAAGCATTGCATGAAGTACACTCAGGACCTAATCCTATCAGTAACTCCATTCCACAACAGAAGTTGAAAAATATACAAAGAAATCATATGCATTAG------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------'
-const dna_example_a_hit = 'TGAATATTATTCTAATTTAACTAATGGCCTTAAACTTGGATACTTATGCAATTAATTAAGTTAGATACTTCAGAAAGAGAACTTTAACTATCCTAATAATCATATTCAAGTCAAACAAGATTCTATTTCCTAGAATATACATGCGAAGTAAAAAAAATGACACTATAATTGATTTTAGCATTTATTATATTTTATCATCATTGAGTGAGACTAATTTTGCTCTTATAAAAACATTTATGCCATACCAATCGACCCCATTTAAGGTTGATGATAGTGCAGCCATGCAGGGAAAGTAAACCCAAATAATAGTACGAAGTAGCTAGGCATAAAAAACTTCAAACAATATATTGTTCTCCCACTATCTAAAAACAAGAAGCCCGGCCCCCATTTTGTGGAGACCACGTATATACTCCAGTAAACAAAAGATATTTAGTCCTCAAATTAACTTTATCCCATGTCAGTGTATGGTATATTCTTAATAATTTTTTGCGGGGTACCCTCACATCATATGAATTTCTCCTTTTTTTTTGTATACCTCAAAACATGTGTTTTCCTTAATATTGCCATAAGCTAACAAAAGCATGGTAGCTAATACTTTTTCTCGATCTAAACCTGCATGTTTACCACTTTCATGAAACAAAAACTATGAACTATTCTTCGGGCTTTTTCATCATTCTTCTTCTGCTGCTATCCCATTTCTTCCCATATTCAAGCTCGAGCATGAGAATAATGATTCAGCAAGTCACCAAAGCAGCAACAGAAAATCACCATCACATGGTAAGTATATAATTTCTTTGATATGATCCGTAATCACTTTTTATTTTTTATAAGCAAGAGGAGCTTTTAAGTTCCTATCATGTTTTCTCTTCTTTTTTTTTTTTGGGTGAAGTTATCATGTTTTCTTTCGTGCCAGTCAAGAGGAGCTGAGAGGGATCATGTTCAAAGGAAAGCATTGCATGAAGTACACTCAGGACCTAATCCTATCAGTAACTCCATTCCACAACAGAAGTTGAAAAATATACAAAGAAATCATATGCATTAGGTCTTCTTTTGTATGTTAATTATTTTTTCCTTTTCTGTTCTTTGTTCTTTCTTTCCCTCCCTTCCTCATATTTGTTACACATATTTCATGAGTCAGCTTTGAATCATGCATAATGAATCTACATTCAGATTGATGCATAACTATAGCTAGCATGACCATCTTCAGTTCTTCACTCTTTTCATTGTGTTATACTGTTATTATCCCTCCCTCCCTCCCTCCCTCCCTCATTTTTCTTTGCGTATAAATTTCAAT'
+const EXAMPLE_A_GENOMIC_SEQ = 'TGAATATTATTCTAATTTAACTAATGGCCTTAAACTTGGATACTTATGCAATTAATTAAGTTAGATACTTCAGAAAGAGAACTTTAACTATCCTAATAATCATATTCAAGTCAAACAAGATTCTATTTCCTAGAATATACATGCGAAGTAAAAAAAATGACACTATAATTGATTTTAGCATTTATTATATTTTATCATCATTGAGTGAGACTAATTTTGCTCTTATAAAAACATTTATGCCATACCAATCGACCCCATTTAAGGTTGATGATAGTGCAGCCATGCAGGGAAAGTAAACCCAAATAATAGTACGAAGTAGCTAGGCATAAAAAACTTCAAACAATATATTGTTCTCCCACTATCTAAAAACAAGAAGCCCGGCCCCCATTTTGTGGAGACCACGTATATACTCCAGTAAACAAAAGATATTTAGTCCTCAAATTAACTTTATCCCATGTCAGTGTATGGTATATTCTTAATAATTTTTTGCGGGGTACCCTCACATCATATGAATTTCTCCTTTTTTTTTGTATACCTCAAAACATGTGTTTTCCTTAATATTGCCATAAGCTAACAAAAGCATGGTAGCTAATACTTTTTCTCGATCTAAACCTGCATGTTTACCACTTTCATGAAACAAAAACTATGAACTATTCTTCGGGCTTTTTCATCATTCTTCTTCTGCTGCTATCCCATTTCTTCCCATATTCAAGCTCGAGCATGAGAATAATGATTCAGCAAGTCACCAAAGCAGCAACAGAAAATCACCATCACATGGTAAGTATATAATTTCTTTGATATGATCCGTAATCACTTTTTATTTTTTATAAGCAAGAGGAGCTTTTAAGTTCCTATCATGTTTTCTCTTCTTTTTTTTTTTTGGGTGAAGTTATCATGTTTTCTTTCGTGCCAGTCAAGAGGAGCTGAGAGGGATCATGTTCAAAGGAAAGCATTGCATGAAGTACACTCAGGACCTAATCCTATCAGTAACTCCATTCCACAACAGAAGTTGAAAAATATACAAAGAAATCATATGCATTAGGTCTTCTTTTGTATGTTAATTATTTTTTCCTTTTCTGTTCTTTGTTCTTTCTTTCCCTCCCTTCCTCATATTTGTTACACATATTTCATGAGTCAGCTTTGAATCATGCATAATGAATCTACATTCAGATTGATGCATAACTATAGCTAGCATGACCATCTTCAGTTCTTCACTCTTTTCATTGTGTTATACTGTTATTATCCCTCCCTCCCTCCCTCCCTCCCTCATTTTTCTTTGCGTATAAATTTCAAT'
+const EXAMPLE_A_CODING_SEQ = '---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ATGAACTATTCTTCGGGCTTTTTCATCATTCTTCTTCTGCTGCTATCCCATTTCTTCCCATATTCAAGCTCGAGCATGAGAATAATGATTCAGCAAGTCACCAAAGCAGCAACAGAAAATCACCATCACAT----------------------------------------------------------------------------------------------------------------------------------------GTCAAGAGGAGCTGAGAGGGATCATGTTCAAAGGAAAGCATTGCATGAAGTACACTCAGGACCTAATCCTATCAGTAACTCCATTCCACAACAGAAGTTGAAAAATATACAAAGAAATCATATGCATTAG------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------'
+const EXAMPLE_A_HIT_SEQ = 'TGAATATTATTCTAATTTAACTAATGGCCTTAAACTTGGATACTTATGCAATTAATTAAGTTAGATACTTCAGAAAGAGAACTTTAACTATCCTAATAATCATATTCAAGTCAAACAAGATTCTATTTCCTAGAATATACATGCGAAGTAAAAAAAATGACACTATAATTGATTTTAGCATTTATTATATTTTATCATCATTGAGTGAGACTAATTTTGCTCTTATAAAAACATTTATGCCATACCAATCGACCCCATTTAAGGTTGATGATAGTGCAGCCATGCAGGGAAAGTAAACCCAAATAATAGTACGAAGTAGCTAGGCATAAAAAACTTCAAACAATATATTGTTCTCCCACTATCTAAAAACAAGAAGCCCGGCCCCCATTTTGTGGAGACCACGTATATACTCCAGTAAACAAAAGATATTTAGTCCTCAAATTAACTTTATCCCATGTCAGTGTATGGTATATTCTTAATAATTTTTTGCGGGGTACCCTCACATCATATGAATTTCTCCTTTTTTTTTGTATACCTCAAAACATGTGTTTTCCTTAATATTGCCATAAGCTAACAAAAGCATGGTAGCTAATACTTTTTCTCGATCTAAACCTGCATGTTTACCACTTTCATGAAACAAAAACTATGAACTATTCTTCGGGCTTTTTCATCATTCTTCTTCTGCTGCTATCCCATTTCTTCCCATATTCAAGCTCGAGCATGAGAATAATGATTCAGCAAGTCACCAAAGCAGCAACAGAAAATCACCATCACATGGTAAGTATATAATTTCTTTGATATGATCCGTAATCACTTTTTATTTTTTATAAGCAAGAGGAGCTTTTAAGTTCCTATCATGTTTTCTCTTCTTTTTTTTTTTTGGGTGAAGTTATCATGTTTTCTTTCGTGCCAGTCAAGAGGAGCTGAGAGGGATCATGTTCAAAGGAAAGCATTGCATGAAGTACACTCAGGACCTAATCCTATCAGTAACTCCATTCCACAACAGAAGTTGAAAAATATACAAAGAAATCATATGCATTAGGTCTTCTTTTGTATGTTAATTATTTTTTCCTTTTCTGTTCTTTGTTCTTTCTTTCCCTCCCTTCCTCATATTTGTTACACATATTTCATGAGTCAGCTTTGAATCATGCATAATGAATCTACATTCAGATTGATGCATAACTATAGCTAGCATGACCATCTTCAGTTCTTCACTCTTTTCATTGTGTTATACTGTTATTATCCCTCCCTCCCTCCCTCCCTCCCTCATTTTTCTTTGCGTATAAATTTCAAT'
 
 // Example of a gene hit against a non-reference genome with extensive polymorphisms
-const dna_example_b_genomic = 'TGAATATTATTCTAATTTAACTAATGGCCTTAAACTTGGATACTTATGCAATTAATTAAGTTAGATACTTCAGAAAGAGAACTTTAACTATCCTAATAATCATATTCAAGTCAAACAAGATTCTATTTCCTAGAATATACATGCGAAGTAAAAAAAATGACACTATAATTGATTTTAGCATTTATTATATTTTATCATCATTGAGTGAGACTAATTTTGCTCTTATAAAAACATTTATGCCATACCAATCGACCCCATTTAAGGTTGATGATAGTGCAGCCATGCAGGGAAAGTAAACCCAAATAATAGTACGAAGTAGCTAGGCATAAAAAACTTCAAACAATATATTGTTCTCCCACTATCTAAAAACAAGAAGCCCGGCCCCCATTTTGTGGAGACCACGTATATACTCCAGTAAACAAAAGATATTTAGTCCTCAAATTAACTTTATCCCATGTCAGTGTATGGTATATTCTTAATAATTTTTTGCGGGGTACCCTCACATCATATGAATTTCTCCTTTTTTTTTGTATACCTCAAAACATGTGTTTTCCTTAATATTGCCATAAGCTAACAAAAGCATGGTAGCTAATACTTTTTCTCGATCTAAACCTGCATGTTTACCACTTTCATGAAACAAAAACTATGAACTATTCTTCGGGCTTTTTCATCATTCTTCTTCTGCTGCTATCCCATTTCTTCCCATATTCAAGCTCGAGCATGAGAATAATGATTCAGCAAGTCACCAAAGCAGCAACAGAAAATCACCATCACATGGTAAGTATATAATTTCTTTGATATGATCCGTAATCACTTTTTATTTTTTATAAGCAAGAGGAGCTTTTAAGTTCCTATCATGTTTTCTCTTCTTTTTTTTTTTTGGGTGAAGTTATCATGTTTTCTTTCGTGCCAGTCAAGAGGAGCTGAGAGGGATCATGTTCAAAGGAAAGCATTGCATGAAGTACACTCAGGACCTAATCCTATCAGTAACTCCATTCCACAACAGAAGTTGAAAAATATACAAAGAAATCATATGCATTAGGTCTTCTTTTGTATGTTAATT-ATT------------------------------TTTTCCTTTTCTGTTCTTTGTTCTTTCTTTCCCTCCCTTCCTCATATTTGTTACACATATTTCATGAGTCAGCTTTGAATCATGCATAATGAATCTACATTCAGATTGATGCATAACTATAGCTAGCATGACCATCTTCAGTTCTTCACTCTTTTCATTGTGTTATACTGTTATTATCCCTCCCTCCCTCCCTCCCTCCCTCATTTTTCTTTGCGTATAAATTTCAAT'
-const dna_example_b_coding = '---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ATGAACTATTCTTCGGGCTTTTTCATCATTCTTCTTCTGCTGCTATCCCATTTCTTCCCATATTCAAGCTCGAGCATGAGAATAATGATTCAGCAAGTCACCAAAGCAGCAACAGAAAATCACCATCACAT----------------------------------------------------------------------------------------------------------------------------------------GTCAAGAGGAGCTGAGAGGGATCATGTTCAAAGGAAAGCATTGCATGAAGTACACTCAGGACCTAATCCTATCAGTAACTCCATTCCACAACAGAAGTTGAAAAATATACAAAGAAATCATATGCATTAG-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------'
-const dna_example_b_hit = 'TGAATATTATTCTAATTTAACTAATGGCCTTAAACTTGGATACTTATGCAATTAATTAAGTTAGATACTTCAGAAAGAGAACTTTAACTATCCTAATAATCATATTCAAGTCAAACAAGATTCTATTTCCTAGAATATACATGCGAAGTAAAAAAAATGACACTATAATTGATTTTAGCATTTATTATATTTTATCATCATTGAGTGAGAATAATTTTGCTCTTATAAAAACATTTATGCCATACCAATCGACCCCATTTAAGGTTGATGATAGTGCAGCCATGCAGGGAAAGTAAACCCAAATAATAGTACGAAGTAGCTAGGCATAAAAAACTTCAAACAATATATTGTTCTCCCACTATCTAAAAACAAGAAGCCCGGCCCCCATTTTGTGGAGACCACGTATATACTCCA--------------------------------------------------------------------------------------------------------------------------------------------------------------------------GTAGCTAATACTTTTTCTCGATCTAAACCTGCATGTTTACCACTTTCATGAAACAAAAACTATGAACTATTCTTCGGGCTTTTTCATCATTCTTCTTCTGCTGCTATACCATTTCTTCCCATATTCAAGCTCGAGCATGAGAATAATGATTCAGCAAGTCACCAAAGCAGCAACAGAAAATCACCATCACATGGTAAGTATATAATTTCTTTGATATGATCCATAATCACTTTTTATTTTTTATAAGCAAGAGGAGCTTTTAAGTTCCTATCATGTTTTCTCTTC--TTTTTTTCTTGGGTGAAGTTATCATGTTTTCTTTCGTGCCAGTCAAGAGGAGCTGAGAGGGATCATGTTCAAAGGAAAGCATTGCATGAAGTACACTCAGGACCTAATCCTATCAGTAACTCCATTCCACAACAGAAGTTGAAAAATATACAAAGAAATCATATGCATTAGGTCTTCTTTTGTATGTTAATTAATTATTTTTTCCTTTTCTTAATAGTAAACTCTCTTTTCCTTTTCTGTTCTTTGTTCTTTCTTTCCCTCCCTTCCTCATATTTGTTACACATATTTCATGAGTCAGCTTTGAATCATGCATAATGAATATAAATTCAGATTGATGCATAACTATAGCTAGCATGACCATCTTCAGTTCTTCACTCTTTTCATTGTGTTATACTGTTATTATCCCTCCCTCCCTCCCT--CT--CTCATTTTTCTTTGCGTATAAATTTCAAT'
+const EXAMPLE_B_GENOMIC_SEQ = 'TGAATATTATTCTAATTTAACTAATGGCCTTAAACTTGGATACTTATGCAATTAATTAAGTTAGATACTTCAGAAAGAGAACTTTAACTATCCTAATAATCATATTCAAGTCAAACAAGATTCTATTTCCTAGAATATACATGCGAAGTAAAAAAAATGACACTATAATTGATTTTAGCATTTATTATATTTTATCATCATTGAGTGAGACTAATTTTGCTCTTATAAAAACATTTATGCCATACCAATCGACCCCATTTAAGGTTGATGATAGTGCAGCCATGCAGGGAAAGTAAACCCAAATAATAGTACGAAGTAGCTAGGCATAAAAAACTTCAAACAATATATTGTTCTCCCACTATCTAAAAACAAGAAGCCCGGCCCCCATTTTGTGGAGACCACGTATATACTCCAGTAAACAAAAGATATTTAGTCCTCAAATTAACTTTATCCCATGTCAGTGTATGGTATATTCTTAATAATTTTTTGCGGGGTACCCTCACATCATATGAATTTCTCCTTTTTTTTTGTATACCTCAAAACATGTGTTTTCCTTAATATTGCCATAAGCTAACAAAAGCATGGTAGCTAATACTTTTTCTCGATCTAAACCTGCATGTTTACCACTTTCATGAAACAAAAACTATGAACTATTCTTCGGGCTTTTTCATCATTCTTCTTCTGCTGCTATCCCATTTCTTCCCATATTCAAGCTCGAGCATGAGAATAATGATTCAGCAAGTCACCAAAGCAGCAACAGAAAATCACCATCACATGGTAAGTATATAATTTCTTTGATATGATCCGTAATCACTTTTTATTTTTTATAAGCAAGAGGAGCTTTTAAGTTCCTATCATGTTTTCTCTTCTTTTTTTTTTTTGGGTGAAGTTATCATGTTTTCTTTCGTGCCAGTCAAGAGGAGCTGAGAGGGATCATGTTCAAAGGAAAGCATTGCATGAAGTACACTCAGGACCTAATCCTATCAGTAACTCCATTCCACAACAGAAGTTGAAAAATATACAAAGAAATCATATGCATTAGGTCTTCTTTTGTATGTTAATT-ATT------------------------------TTTTCCTTTTCTGTTCTTTGTTCTTTCTTTCCCTCCCTTCCTCATATTTGTTACACATATTTCATGAGTCAGCTTTGAATCATGCATAATGAATCTACATTCAGATTGATGCATAACTATAGCTAGCATGACCATCTTCAGTTCTTCACTCTTTTCATTGTGTTATACTGTTATTATCCCTCCCTCCCTCCCTCCCTCCCTCATTTTTCTTTGCGTATAAATTTCAAT'
+const EXAMPLE_B_CODING_SEQ = '---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ATGAACTATTCTTCGGGCTTTTTCATCATTCTTCTTCTGCTGCTATCCCATTTCTTCCCATATTCAAGCTCGAGCATGAGAATAATGATTCAGCAAGTCACCAAAGCAGCAACAGAAAATCACCATCACAT----------------------------------------------------------------------------------------------------------------------------------------GTCAAGAGGAGCTGAGAGGGATCATGTTCAAAGGAAAGCATTGCATGAAGTACACTCAGGACCTAATCCTATCAGTAACTCCATTCCACAACAGAAGTTGAAAAATATACAAAGAAATCATATGCATTAG-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------'
+const EXAMPLE_B_HIT_SEQ = 'TGAATATTATTCTAATTTAACTAATGGCCTTAAACTTGGATACTTATGCAATTAATTAAGTTAGATACTTCAGAAAGAGAACTTTAACTATCCTAATAATCATATTCAAGTCAAACAAGATTCTATTTCCTAGAATATACATGCGAAGTAAAAAAAATGACACTATAATTGATTTTAGCATTTATTATATTTTATCATCATTGAGTGAGAATAATTTTGCTCTTATAAAAACATTTATGCCATACCAATCGACCCCATTTAAGGTTGATGATAGTGCAGCCATGCAGGGAAAGTAAACCCAAATAATAGTACGAAGTAGCTAGGCATAAAAAACTTCAAACAATATATTGTTCTCCCACTATCTAAAAACAAGAAGCCCGGCCCCCATTTTGTGGAGACCACGTATATACTCCA--------------------------------------------------------------------------------------------------------------------------------------------------------------------------GTAGCTAATACTTTTTCTCGATCTAAACCTGCATGTTTACCACTTTCATGAAACAAAAACTATGAACTATTCTTCGGGCTTTTTCATCATTCTTCTTCTGCTGCTATACCATTTCTTCCCATATTCAAGCTCGAGCATGAGAATAATGATTCAGCAAGTCACCAAAGCAGCAACAGAAAATCACCATCACATGGTAAGTATATAATTTCTTTGATATGATCCATAATCACTTTTTATTTTTTATAAGCAAGAGGAGCTTTTAAGTTCCTATCATGTTTTCTCTTC--TTTTTTTCTTGGGTGAAGTTATCATGTTTTCTTTCGTGCCAGTCAAGAGGAGCTGAGAGGGATCATGTTCAAAGGAAAGCATTGCATGAAGTACACTCAGGACCTAATCCTATCAGTAACTCCATTCCACAACAGAAGTTGAAAAATATACAAAGAAATCATATGCATTAGGTCTTCTTTTGTATGTTAATTAATTATTTTTTCCTTTTCTTAATAGTAAACTCTCTTTTCCTTTTCTGTTCTTTGTTCTTTCTTTCCCTCCCTTCCTCATATTTGTTACACATATTTCATGAGTCAGCTTTGAATCATGCATAATGAATATAAATTCAGATTGATGCATAACTATAGCTAGCATGACCATCTTCAGTTCTTCACTCTTTTCATTGTGTTATACTGTTATTATCCCTCCCTCCCTCCCT--CT--CTCATTTTTCTTTGCGTATAAATTTCAAT'
+
+const DEFAULT_SLAC_LENGTH = 50;
+
+// Internal variables to track user inputs to allow re-querying backend on SLAC length change.
+// In terms of efficiency, it's not ideal re-running the whole thing each time but we'll cross that bridge when we need to.
+let lastInputMethod = null;
+let miniSlacLength = null;
 
 // Load Example A - Pre-fill sequences and trigger process
 document.getElementById('load-example-a').addEventListener('click', () => {
     document.getElementById('per-sequence-tab').click();
-    document.getElementById('genomic_seq').value = dna_example_a_genomic;  // Example A genomic
-    document.getElementById('coding_seq').value = dna_example_a_coding;   // Example A coding
-    document.getElementById('hit_seq').value = dna_example_a_hit;         // Example A hit
+    document.getElementById('genomic-seq').value = EXAMPLE_A_GENOMIC_SEQ;  // Example A genomic
+    document.getElementById('coding-seq').value = EXAMPLE_A_CODING_SEQ;   // Example A coding
+    document.getElementById('hit-seq').value = EXAMPLE_A_HIT_SEQ;         // Example A hit
     document.getElementById('process-per-sequence').click();
 });
 
 // Load Example B - Pre-fill sequences and trigger process
 document.getElementById('load-example-b').addEventListener('click', () => {
     document.getElementById('per-sequence-tab').click();
-    document.getElementById('genomic_seq').value = dna_example_b_genomic;  // Example B genomic
-    document.getElementById('coding_seq').value = dna_example_b_coding;   // Example B coding
-    document.getElementById('hit_seq').value = dna_example_b_hit;         // Example B hit
+    document.getElementById('genomic-seq').value = EXAMPLE_B_GENOMIC_SEQ;  // Example B genomic
+    document.getElementById('coding-seq').value = EXAMPLE_B_CODING_SEQ;   // Example B coding
+    document.getElementById('hit-seq').value = EXAMPLE_B_HIT_SEQ;         // Example B hit
     document.getElementById('process-per-sequence').click();
 });
 
 // Helper functions for sliders and inputs
 function updateNumberInput(value) {
-    document.getElementById('mini_slac_length_input').value = value;
+    document.getElementById('mini-slac-length-input').value = value;
 }
 
 function updateSliderInput(value) {
-    const slider = document.getElementById('mini_slac_length');
+    const slider = document.getElementById('mini-slac-length');
     const numericValue = parseInt(value);
     if (numericValue >= slider.min && numericValue <= slider.max) {
         slider.value = numericValue;
     }
 }
 
+function refreshOutputsOnLengthChange() {
+    let newLength = document.getElementById('mini-slac-length').value;
+    // Only run if the length has changed
+    if (newLength !== miniSlacLength) {
+        miniSlacLength = newLength;
+        if (lastInputMethod === 'process-per-sequence') {
+            document.getElementById('process-per-sequence').click();
+        } else if (lastInputMethod === 'process-fasta-text') {
+            document.getElementById('process-fasta-text').click();
+        } else if (lastInputMethod === 'process-fasta-upload') {
+            document.getElementById('process-fasta-upload').click();
+        }
+    }
+}
+
+// Function to check if an element is in view
+function isInViewport(element) {
+    const rect = element.getBoundingClientRect();
+    return (
+        rect.top >= 0 &&
+        rect.left >= 0 &&
+        rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+        rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+    );
+}
+
+// Function to scroll to the miniSLAC card if it's not in view
+function scrollToResults() {
+    const miniSlacCard = document.querySelector('#minislac_output');
+
+    if (!isInViewport(miniSlacCard)) {
+        miniSlacCard.scrollIntoView({ behavior: 'smooth' });
+    }
+}
+
 // Event listeners for processing buttons
 document.getElementById('process-per-sequence').addEventListener('click', async () => {
-    const hit_seq = document.getElementById('hit_seq').value.trim();
-    const full_ref_seq = document.getElementById('genomic_seq').value.trim();
-    const ref_context_seq = document.getElementById('coding_seq').value.trim();
-    const mini_slac_length = document.getElementById('mini_slac_length').value;
+    const hitSeq = document.getElementById('hit-seq').value.trim();
+    const fullRefSeq = document.getElementById('genomic-seq').value.trim();
+    const refContextSeq = document.getElementById('coding-seq').value.trim();
+    miniSlacLength = document.getElementById('mini-slac-length').value;
+
+    lastInputMethod = 'process-per-sequence';
 
     updateLog('Processing... Please wait.', 'info');
 
@@ -53,7 +97,7 @@ document.getElementById('process-per-sequence').addEventListener('click', async 
         const response = await fetch('https://slacserver.vercel.app/slac-3-input', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ hit_seq, full_ref_seq, ref_context_seq, mini_slac_length })
+            body: JSON.stringify({ hitSeq, fullRefSeq, refContextSeq, miniSlacLength })
         });
 
         const endTime = performance.now();
@@ -64,18 +108,25 @@ document.getElementById('process-per-sequence').addEventListener('click', async 
             updateLog(`Finished in ${elapsedTime} ms`, 'success');
             displayResults(data);
         } else {
-            const errorData = await response.json();
-            updateLog(`Error: ${errorData.error}`, 'danger');  // Backend error display
+            throw new Error(`Server returned status: ${response.status} ${response.statusText}`);
         }
     } catch (error) {
         console.error('Error processing request:', error);
-        updateLog('An unexpected error occurred processing per sequence. Please review your inputs and try again later', 'danger');
+
+        // User-friendly message for network errors
+        if (error.message === 'Failed to fetch') {
+            updateLog('Connection error: Unable to reach the server. Please check your connection and try again.', 'danger');
+        } else {
+            updateLog(`Processing failed: ${error.message}`, 'danger');
+        }
     }
 });
 
 document.getElementById('process-fasta-text').addEventListener('click', async () => {
-    const fasta_text = document.getElementById('fasta_text').value.trim();
-    const mini_slac_length = document.getElementById('mini_slac_length').value;
+    const fastaText = document.getElementById('fasta-text').value.trim();
+    miniSlacLength = document.getElementById('mini-slac-length').value;
+
+    lastInputMethod = 'process-fasta-text';
 
     updateLog('Processing... Please wait.', 'info');
 
@@ -84,7 +135,7 @@ document.getElementById('process-fasta-text').addEventListener('click', async ()
         const response = await fetch('https://slacserver.vercel.app/slac-paste-fasta', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ fasta_text, mini_slac_length })
+            body: JSON.stringify({ fastaText, miniSlacLength })
         });
 
         const endTime = performance.now();
@@ -95,27 +146,34 @@ document.getElementById('process-fasta-text').addEventListener('click', async ()
             updateLog(`Finished in ${elapsedTime} ms`, 'success');
             displayResults(data);
         } else {
-            const errorData = await response.json();
-            updateLog(`Error: ${errorData.error}`, 'danger');  // Backend error display
+            throw new Error(`Server returned status: ${response.status} ${response.statusText}`);
         }
     } catch (error) {
         console.error('Error processing request:', error);
-        updateLog('An unexpected error occurred processing FASTA text. Please review your inputs and try again later', 'danger');
+
+        // User-friendly message for network errors
+        if (error.message === 'Failed to fetch') {
+            updateLog('Connection error: Unable to reach the server. Please check your connection and try again.', 'danger');
+        } else {
+            updateLog(`Processing failed: ${error.message}`, 'danger');
+        }
     }
 });
 
 document.getElementById('process-fasta-upload').addEventListener('click', async () => {
-    const fasta_file = document.getElementById('fasta_file').files[0];
-    const mini_slac_length = document.getElementById('mini_slac_length').value;
-
-    if (!fasta_file) {
+    const fastaFile = document.getElementById('fasta_file').files[0];
+    miniSlacLength = document.getElementById('mini-slac-length').value;
+    
+    if (!fastaFile) {
         alert('Please upload a FASTA file.');
         return;
     }
-
+    
+    lastInputMethod = 'process-fasta-upload';
+    
     const formData = new FormData();
-    formData.append('fasta_file', fasta_file);  // Append the file
-    formData.append('mini_slac_length', mini_slac_length);  // Append the mini_slac_length
+    formData.append('fastaFile', fasta_file);
+    formData.append('miniSlacLength', miniSlacLength);
 
 
     updateLog('Processing... Please wait.', 'info');
@@ -134,12 +192,17 @@ document.getElementById('process-fasta-upload').addEventListener('click', async 
             updateLog(`Finished in ${elapsedTime} ms`, 'success');
             displayResults(data);
         } else {
-            const errorData = await response.json();
-            updateLog(`Error: ${errorData.error}`, 'danger');  // Backend error display
+            throw new Error(`Server returned status: ${response.status} ${response.statusText}`);
         }
     } catch (error) {
         console.error('Error processing request:', error);
-        updateLog('An unexpected error occurred processing the file. Please review your inputs and try again later', 'danger');
+
+        // User-friendly message for network errors
+        if (error.message === 'Failed to fetch') {
+            updateLog('Connection error: Unable to reach the server. Please check your connection and try again.', 'danger');
+        } else {
+            updateLog(`Processing failed: ${error.message}`, 'danger');
+        }
     }
 });
 
@@ -147,25 +210,29 @@ document.getElementById('process-fasta-upload').addEventListener('click', async 
 function updateLog(message, type = 'info') {
     const logAlert = document.getElementById('log_alert');
     logAlert.textContent = message;
-
-    // Remove any existing alert-* classes (for type consistency)
     logAlert.className = 'alert alert-' + type;
 }
 
-// Function to display results
+// Displaying the generated SLAC sequences
 function displayResults(data) {
     document.getElementById('minislac_output').textContent = data.mini_slac;
     document.getElementById('fullslac_output').value = data.full_slac;
     document.getElementById('seqslac_output').value = data.seq_slac;
     console.log('Processing time: ', data.time);
+    scrollToResults();
 }
+
+// Handle miniSLAC length changes once an output has already been generated
+document.getElementById('mini-slac-length').addEventListener('change', async () => {
+    refreshOutputsOnLengthChange();
+});
 
 // Clear page on refresh
 window.addEventListener('DOMContentLoaded', () => {
     // Reset input fields and text areas
-    document.getElementById('genomic_seq').value = '';
-    document.getElementById('coding_seq').value = '';
-    document.getElementById('hit_seq').value = '';
+    document.getElementById('genomic-seq').value = '';
+    document.getElementById('coding-seq').value = '';
+    document.getElementById('hit-seq').value = '';
 
     // Clear textareas for SLAC outputs
     document.getElementById('fullslac_output').value = '';
@@ -174,6 +241,14 @@ window.addEventListener('DOMContentLoaded', () => {
 
     // Reset log message to the default placeholder
     updateLog('Click process to generate outputs.', 'info');
+
+    // Reset internal variables
+    lastInputMethod = null;
+    miniSlacLength = null;
+
+    // Reset sliders and number inputs
+    updateNumberInput(DEFAULT_SLAC_LENGTH);
+    updateSliderInput(DEFAULT_SLAC_LENGTH);
 
     // Reset to the default tab
     const defaultTab = new bootstrap.Tab(document.getElementById('per-sequence-tab'));

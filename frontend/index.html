@@ -19,30 +19,39 @@
 
 <!-- Section for explanatory text with example loading -->
 <section class="container my-4">
-    <!-- First row: Two paragraphs of text across the full width -->
+    <!-- Introduction with title and separator -->
     <div class="row">
-        <div class="col-12">
+        <div class="col-12 text-center">
+            <h4>Introduction to SLAC (Single Line Alignment with Context)</h4>
             <p>Single Line Alignment with Context (SLAC) is a system designed to aid users of genetics/genomics workflows to intuitively understand hits relative to a query gene structure, with extremely compact, plain text previews.</p>
             <p>For use in your own pipelines and more technical information, please see the <a href="https://github.com/ryanzujic/slac">standalone SLAC repository</a>.</p>
+            <hr> <!-- Separator line -->
         </div>
     </div>
 
-    <!-- Second row: Two columns (Description + Buttons) -->
-    <div class="row mt-3">
-        <!-- Left column: Text description about examples -->
-        <div class="col-md-8">
-            <p>The examples below show a ~1300 bp genomic query sequence with two exons and both 5' and 3' UTRs, aligned to a hit locus in a soybean reference (A) and non-reference (B) genome.</p>
-            <p>SLAC previews of example A show the gene's structure at a glance.</p>
-            <p>Example B is a non-reference hit to the same query. SLAC outputs show polymorphism types and locations, relative to the query's structure. The miniSLAC would enrich a researcher's initial understanding of the hit beyond metrics such as its 99.6% CDS identity.</p>
+    <!-- Section with examples description and buttons -->
+    <div class="row mt-4">
+        <div class="col-12">
+            <p class="text-center">
+                Below are two SLAC examples that showcase a genomic query sequence (~1300 bp) with two exons and both 5' and 3' UTRs, aligned to reference and non-reference genomes:
+            </p>
+            <ul class="list-unstyled text-center">
+                <li><strong>Example A:</strong> Query gene aligned to a reference soybean genome. Contains a single exon and UTRs. All positions match, and SLAC outputs enable simple communication of the gene’s structure.</li>
+                <li><strong>Example B:</strong> Query gene aligned to a non-reference genome hit. 99.6% identity to CDS, with extensive non-coding polymorphisms, including a large deletion within the 5' UTR.</li>
+            </ul>
         </div>
 
-        <!-- Right column: Buttons for loading examples -->
-        <div class="col-md-4 d-flex flex-column align-items-center">
-            <button id="load-example-a" class="btn btn-secondary mb-2">Load Example A: Query gene with single exon and UTRs, reference genome hit</button>
-            <button id="load-example-b" class="btn btn-secondary">Load Example B: Same query, non-reference genome hit<br />99.6% identity to CDS, large deletion in 5' UTR'.</button>
+        <!-- Buttons aligned centrally for loading examples -->
+        <div class="col-12 d-flex justify-content-center mt-4">
+            <div class="btn-group">
+                <button id="load-example-a" class="btn btn-secondary">Load Example A</button>
+                <button id="load-example-b" class="btn btn-secondary">Load Example B</button>
+            </div>
         </div>
     </div>
 </section>
+
+
 
 
 <!-- Tabs for input modes with descriptions -->
@@ -66,16 +75,16 @@
                 <div class="tab-pane fade show active" id="per-sequence" role="tabpanel" aria-labelledby="per-sequence-tab">
                     <p>Please enter the genomic, coding, and hit sequences below. The genomic and hit sequences are essential and must be aligned. The coding sequence is optional. If an unaligned coding sequence is provided, a simpler kmer matching algorithm will attempt to align it based on the assumption that the complete and exact CDS, with potential gaps, is contained within the genomic sequence.</p>
                     <div class="mb-3">
-                        <label for="genomic_seq" class="form-label">Genomic Sequence</label>
-                        <input type="text" class="form-control" id="genomic_seq" placeholder="Enter genomic sequence">
+                        <label for="genomic-seq" class="form-label">Genomic Sequence</label>
+                        <input type="text" class="form-control" id="genomic-seq" placeholder="Enter genomic sequence">
                     </div>
                     <div class="mb-3">
-                        <label for="coding_seq" class="form-label">Coding Sequence</label>
-                        <input type="text" class="form-control" id="coding_seq" placeholder="Enter coding sequence">
+                        <label for="coding-seq" class="form-label">Coding Sequence</label>
+                        <input type="text" class="form-control" id="coding-seq" placeholder="Enter coding sequence">
                     </div>
                     <div class="mb-3">
-                        <label for="hit_seq" class="form-label">Hit Sequence</label>
-                        <input type="text" class="form-control" id="hit_seq" placeholder="Enter hit sequence">
+                        <label for="hit-seq" class="form-label">Hit Sequence</label>
+                        <input type="text" class="form-control" id="hit-seq" placeholder="Enter hit sequence">
                     </div>
                     <button id="process-per-sequence" class="btn btn-primary w-100">Process</button>
                 </div>
@@ -84,8 +93,8 @@
                 <div class="tab-pane fade" id="fasta-text" role="tabpanel" aria-labelledby="fasta-text-tab">
                     <p>Paste 2 to 3 aligned FASTA sequences. They must be ordered as genomic, coding (optional) then hit. Please ensure each sequence has a definition line starting with a carat.</p>
                     <div class="mb-3">
-                        <label for="fasta_text" class="form-label">FASTA Input</label>
-                        <textarea class="form-control" id="fasta_text" rows="5" placeholder="Paste your aligned FASTA sequences here"></textarea>
+                        <label for="fasta-text" class="form-label">FASTA Input</label>
+                        <textarea class="form-control" id="fasta-text" rows="5" placeholder="Paste your aligned FASTA sequences here"></textarea>
                     </div>
                     <button id="process-fasta-text" class="btn btn-primary w-100">Process</button>
                 </div>
@@ -106,21 +115,9 @@
 
 <!-- Customization options (Slider for miniSLAC length) -->
 <section class="container my-4">
-
     <!-- Log/Reporting Alert (default placeholder) -->
     <div id="log_alert" class="alert alert-info" role="alert">
         Click process to generate outputs.
-    </div>
-
-    <div class="card">
-        <div class="card-body">
-            <h3>miniSLAC Length</h3>
-            <p>The miniSLAC length parameter defines how many characters it is abbreviated to. The default is 50, but you can choose a value between 10 and 200.</p>
-            <div class="d-flex align-items-center">
-                <input type="range" class="form-range" id="mini_slac_length" min="10" max="200" value="50" oninput="updateNumberInput(this.value)">
-                <input type="number" id="mini_slac_length_input" class="form-control mx-3" style="width: 80px;" min="10" max="200" value="50" oninput="updateSliderInput(this.value)">
-            </div>
-        </div>
     </div>
 </section>
 
@@ -130,6 +127,15 @@
         <div class="card-body">
             <h3>miniSLAC</h3>
             <p>This is the abbreviated SLAC, ideal for thumbnail previews to aid efficient navigation of large datasets within standard interfaces.</p>
+
+            <!-- miniSLAC Length -->
+            <div class="d-flex align-items-center">
+                <label for="mini-slac-length" class="me-3">Length</label> <!-- Label to the left of the slider -->
+                <input type="range" class="form-range" id="mini-slac-length" min="10" max="200" value="50" oninput="updateNumberInput(this.value)">
+                <input type="number" id="mini-slac-length-input" class="form-control mx-3" style="width: 80px;" min="10" max="200" value="50" oninput="updateSliderInput(this.value)">
+            </div>
+
+            <!-- miniSLAC output -->
             <pre id="minislac_output" class="bg-light p-3" style="font-family: 'Courier New'; color: black;"></pre>
             <button id="copy-minislac" class="btn btn-secondary">Copy miniSLAC Output</button>
         </div>
@@ -163,7 +169,7 @@
             <pre class="bg-light p-3" style="font-family: 'Courier New'; color: black;">
 from slac import SLAC
 
-slac_seq = SLAC(genomic="ATG...", cds="ATG...", hit="ATT...")
+slac_seq = SLAC(genomic="ATG...", cds="ATG...", hit="ATT...", size_limit=50)
 
 slac_seq  # miniSLAC is the default string representation
 
