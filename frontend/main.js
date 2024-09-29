@@ -75,8 +75,8 @@ function isInViewport(element) {
 // Function to scroll to the miniSLAC card and log if not in view
 function scrollToResults() {
     try {
-        const miniSlacCard = document.querySelector('#minislac_output');
-        const logAlert = document.querySelector('#log_output');
+        const miniSlacCard = document.querySelector('#minislac-output');
+        const logAlert = document.querySelector('#log-alert');
 
         // Scroll to the log and output if neither is currently in view
         if (!isInViewport(miniSlacCard) && !isInViewport(logAlert)) {
@@ -223,14 +223,14 @@ document.getElementById('process-fasta-upload').addEventListener('click', async 
 
 // Helper function to update the log message
 function updateLog(message, type = 'info') {
-    const logAlert = document.getElementById('log_alert');
+    const logAlert = document.getElementById('log-alert');
     logAlert.textContent = message;
     logAlert.className = 'alert alert-' + type;
 }
 
 // Displaying the generated SLAC sequences
 function displayResults(data) {
-    document.getElementById('minislac_output').textContent = data.mini_slac;
+    document.getElementById('minislac-output').textContent = data.mini_slac;
     document.getElementById('fullslac_output').value = data.full_slac;
     document.getElementById('seqslac_output').value = data.seq_slac;
     console.log('Processing time: ', data.time);
@@ -251,7 +251,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
     // Clear textareas for SLAC outputs
     document.getElementById('fullslac_output').value = '';
-    document.getElementById('minislac_output').textContent = '';
+    document.getElementById('minislac-output').textContent = '';
     document.getElementById('seqslac_output').value = '';
 
     // Reset log message to the default placeholder
