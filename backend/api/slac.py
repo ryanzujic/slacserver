@@ -1,16 +1,5 @@
 import math
 from collections import Counter
-import logging
-import sys
-
-# -- Configure logging --
-log_to_file = True
-log_level = logging.INFO
-if log_to_file:
-    logging.basicConfig(filename='summary.log', encoding='utf-8', filemode='a', level=log_level,
-                        format='--- %(asctime)s --- \n%(levelname)s %(message)s')
-else:
-    logging.basicConfig(level=log_level, stream=sys.stdout, format='%(asctime)s %(levelname)s %(message)s')
 
 # Converts comparison symbols to alternatives that can be used to convey the quality/frequency of that symbol within a
 # simplified block of symbols.
@@ -40,13 +29,34 @@ DISPLAY_MODE_FULL = "full"
 DISPLAY_MODE_FULL_HIT = "hits"
 
 class SLAC(object):
-    """
-    A class designed to represent a genomic sequence with cds and hit sequences aligned to it
-    using a single line of text.
-    """
     def __init__(self, genomic=None, cds=None, hit=None, size_limit=DEFAULT_SIZE,
                  frequency_threshold=DEFAULT_FREQ_THRESHOLD, display_mode=None, auto_align_cds_to_genomic=False):
+        """
+        A class designed to represent a hit sequence aligned to the query gene's genomic and coding sequence, within
+        a single continuous text string. This includes an abbreviated format called miniSLAC, which can fit within an
+        near arbitrary character length, at the expense of resolution.
 
+        Args:
+            genomic: (str) the genomic sequence, aligned to the hit sequence.
+            cds: (str) the coding sequence. Ideally this will be supplied aligned to the other sequences, however an
+            unaligned CDS can be provided and aligned to the genomic sequence if required - and a simple algorithm
+            will attempt to align it to the genomic sequence.
+            hit: (str) the hit sequence, aligned to the genomic sequence.
+            size_limit: (int) the maximum number of characters to display in the miniSLAC output. Default is 50.
+            frequency_threshold: (float) the proportion of each abbreviated block upon which the miniSLAC is built,
+            which must be the most common character, in order for the full version of that character to be used instead
+            of the mixed character. Default is 1.0.
+            Eg: The 10 character block of |||X|||||| will be abbreviated to the mixed character '!' if the frequency
+            threshold is 1.0. If it was 0.8, it would be abbreviated to the full character '|'. You'll probably want it
+            on the default to not miss details.
+            display_mode: (str) the default display mode for the object. Must be one of: short, full, full_hit.
+            Default is short (miniSLAC).
+            auto_align_cds_to_genomic: (bool) if True, will attempt to align the CDS to the genomic sequence if the CDS
+            is provided but not aligned. Default is False. if False, a provided CDS must be pre-aligned to the genomic.
+
+        Raises:
+            ValueError: Conditions are not met for the input sequences.
+        """
         if genomic and not isinstance(genomic, str):
             raise ValueError(f"genomic must be a string, not {type(genomic)}")
         if cds and not isinstance(cds, str):
@@ -59,7 +69,7 @@ class SLAC(object):
 
         if cds and not genomic:
             raise ValueError("If a cds sequence is supplied, a genomic sequence must also be supplied. "
-                             "Supply cds as genomic if only cds is available.")
+                             "Supply cds as genomic if only cds is available as the cds is only a layer of context.")
 
         if display_mode and display_mode not in [DISPLAY_MODE_SHORT, DISPLAY_MODE_FULL, DISPLAY_MODE_FULL_HIT]:
             raise ValueError(f"Invalid display mode: {display_mode}. Must be one of: "
@@ -68,15 +78,11 @@ class SLAC(object):
         if not display_mode:
             display_mode = DISPLAY_MODE_SHORT
 
-        # Ensure all supplied sequences are the same length
-        supplied = [s for s in [genomic, cds, hit] if s]
-        lengths = [len(s) for s in supplied if s]
-        if not lengths:
-            raise ValueError("No sequences supplied")
+        if genomic and hit:
+            if len(genomic) != len(hit):
+                raise ValueError("Genomic and hit sequences must be aligned, and therefore be the same length")
 
-        if len(set(lengths)) > 1:
-            raise ValueError("All supplied sequences must be the same length")
-        max_length = max(lengths)
+        max_length = max([len(genomic), len(cds), len(hit)])
 
         self.genomic = genomic.upper().replace(" ", "-") if genomic else ""
         self.cds = cds.upper().replace(" ", "-") if cds else ""
@@ -279,8 +285,8 @@ class SLAC(object):
         # --- Calculate metrics ---
 
         if uncounted:
-            print(f"There were {uncounted} uncounted positions in the alignment, applying None to metrics to avoid "
-                  f"misleading results")
+            # print(f"There were {uncounted} uncounted positions in the alignment, applying None to metrics to avoid "
+            #       f"misleading results")
             self.identity_to_genomic = None
             self.identity_to_cds = None
             self.coverage_to_genomic = None
@@ -411,87 +417,6 @@ class SLAC(object):
 
             i += block_size
 
-    def _generate_short_rle(self):
-        block_size = int(math.floor(float(len(self.genomic)) / self.size_limit))
-        if block_size < 1 or len(self.genomic) <= self.size_limit:
-            self._short = self._full
-
-        self._short = ""
-
-        short_rle = []
-
-        current_run_char = None
-        current_run_length = 0
-        i = 0
-        while i < len(self._full):
-            if not current_run_char:
-                current_run_char = self._full[i]
-                current_run_length = 1
-                i += 1
-
-            elif self._full[i] == current_run_char:
-                current_run_length += 1
-                i += 1
-
-            else:
-                short_rle.append([current_run_char, current_run_length])
-                current_run_char = self._full[i]
-                current_run_length = 1
-                i += 1
-
-            # TODO - DEBUG to remove
-            # raise Exception(f"Unexpected case in alignment preview at position {i}. Current run char: {current_run_char}, current run length: {current_run_length} and short_rle: {short_rle}. Full alignment: {self._full}")
-
-            # If we're at the end, add our current run to the short_rle
-            if i == len(self._full) - 1:
-                short_rle.append([current_run_char, current_run_length])
-
-        def rle_to_human_readable(rle_list):
-            """Recursive function to build human readable version within the allowed size limit"""
-            current_block = ""
-            # TODO - IMPORTANT, change i to something else! See outer scope
-            i = 0
-            while i < len(rle_list):
-                remaining_block_size = block_size - len(current_block)
-                char = rle_list[i][0]
-                repeats = int(rle_list[i][1:])
-                # | * 10   represents:
-                # ||||||||||    which is being squeezed into:
-                # [block][block][block]   resulting in a block of:
-                # |||||||
-                if repeats > remaining_block_size:
-                    rle_list[i] = [char, repeats - remaining_block_size]
-                    repeats = block_size
-                    current_block += char * repeats
-                # | * 3   represents:
-                # |||    which is being squeezed into:
-                # [block][block][block]   resulting in a block of:
-                # |||   which may ultimately end up like this if next run char is . * 4
-                # |||....
-                else:
-                    current_block += char * repeats
-                    i += 1
-                if len(current_block) == block_size:
-                    self._short += current_block
-                    current_block = ""
-                """
-                Thunkin...
-                
-                if we have a block like [|||____] followed by a block of [______] do we just call the prior 
-                one [|] and the latter one [_]?
-                Can we always only look to the next block?
-                Do we only do this to simplify where the character present are matches to cds or genomic?
-                ie, if this block is all 'matches' to either seq type, and the next block is all 'matches' to the seq
-                type that was on the end of this block, do we let us simplify this block to a full character rather than
-                the partial version?
-                Could we just apply that to the original algorithm, based on the assumption that introns should be long,
-                and we won't jump between exon to intron and back to exon in a single block? So we'd only need
-                'if block is all matches to cds or genomic, just use the most frequent character'?
-                """
-
-        rle_to_human_readable(short_rle)
-        return
-
     @staticmethod
     def align_cds_to_genomic(aligned_genomic, cds, kmer_size=5):
         """
@@ -499,8 +424,11 @@ class SLAC(object):
         the user can provide an un-aligned cds, we can perform simple kmer matching to determine how the cds
         aligns with the genomic, and retain full functionality of the tool.
 
+        Disclaimer: This is not a full alignment tool and has not yet been tested in edge cases, particularly if
+        insertions are common.
+
         Args:
-            genomic: (str) the genomic sequence
+            aligned_genomic: (str) the genomic sequence as aligned to the hit, if one was provided.
             cds: (str) the coding sequence
             kmer_size: (int) the size of the kmers to use for matching. We check kmer windows between the sequences and
             insert gaps in the CDS until each kmer matches the genomic sequence. When a subsequent kmer does not match,
