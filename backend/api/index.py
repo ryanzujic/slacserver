@@ -16,10 +16,6 @@ def after_request(response):
     logging.info("Response Headers: %s", response.headers)
     return response
 
-@app.route('/')
-def index():
-    return render_template('index.html', version=VERSION)
-
 # Route for 3-sequence input method
 @app.route('/slac-3-input', methods=['POST'])
 def slac_3_input():

@@ -63,11 +63,6 @@ function refreshOutputsOnLengthChange() {
 
 // Function to check if an element is in view
 function isInViewport(element) {
-    if (!element) {
-        console.warn('Element is null or undefined');
-        return false;
-    }
-
     const rect = element.getBoundingClientRect();
     return (
         rect.top >= 0 &&
@@ -82,12 +77,6 @@ function scrollToResults() {
     try {
         const miniSlacCard = document.querySelector('#minislac_output');
         const logAlert = document.querySelector('#log_output');
-
-        // Check if elements exist before attempting to scroll
-        if (!miniSlacCard || !logAlert) {
-            console.warn('One or more elements not found: miniSlacCard or logAlert.');
-            return;
-        }
 
         // Scroll to the log and output if neither is currently in view
         if (!isInViewport(miniSlacCard) && !isInViewport(logAlert)) {
