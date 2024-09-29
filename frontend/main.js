@@ -77,7 +77,7 @@ function scrollToResults() {
     const miniSlacCard = document.querySelector('#minislac_output');
 
     if (!isInViewport(miniSlacCard)) {
-        miniSlacCard.scrollIntoView({ behavior: 'smooth' });
+        miniSlacCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
 }
 
@@ -139,11 +139,11 @@ document.getElementById('process-fasta-text').addEventListener('click', async ()
         });
 
         const endTime = performance.now();
-        const elapsedTime = (endTime - startTime).toFixed(2);
+        const elapsedTime = (endTime - startTime).toFixed(2); // Unused but keeping for future reference
 
         if (response.ok) {
             const data = await response.json();
-            updateLog(`Finished in ${elapsedTime} ms`, 'success');
+            updateLog('Finished', 'success');
             displayResults(data);
         } else {
             throw new Error(`Server returned status: ${response.status} ${response.statusText}`);
@@ -189,7 +189,7 @@ document.getElementById('process-fasta-upload').addEventListener('click', async 
 
         if (response.ok) {
             const data = await response.json();
-            updateLog(`Finished in ${elapsedTime} ms`, 'success');
+            updateLog('Finished', 'success');
             displayResults(data);
         } else {
             throw new Error(`Server returned status: ${response.status} ${response.statusText}`);

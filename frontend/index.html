@@ -25,7 +25,6 @@
             <h4>Introduction to SLAC (Single Line Alignment with Context)</h4>
             <p>Single Line Alignment with Context (SLAC) is a system designed to aid users of genetics/genomics workflows to intuitively understand hits relative to a query gene structure, with extremely compact, plain text previews.</p>
             <p>For use in your own pipelines and more technical information, please see the <a href="https://github.com/ryanzujic/slac">standalone SLAC repository</a>.</p>
-            <hr> <!-- Separator line -->
         </div>
     </div>
 
@@ -33,10 +32,10 @@
     <div class="row mt-4">
         <div class="col-12">
             <p class="text-center">
-                Below are two SLAC examples that showcase a genomic query sequence (~1300 bp) with two exons and both 5' and 3' UTRs, aligned to reference and non-reference genomes:
+                Don't have your own sequences at hand?<br />Try out the two examples below, demonstrating hits against a ~1300 bp query gene comprised of two exons and both 5' and 3' UTRs.
             </p>
             <ul class="list-unstyled text-center">
-                <li><strong>Example A:</strong> Query gene aligned to a reference soybean genome. Contains a single exon and UTRs. All positions match, and SLAC outputs enable simple communication of the gene’s structure.</li>
+                <li><strong>Example A:</strong> Query gene aligned to a reference soybean genome. All positions match, and SLAC outputs enable convenient communication of the gene’s structure.</li>
                 <li><strong>Example B:</strong> Query gene aligned to a non-reference genome hit. 99.6% identity to CDS, with extensive non-coding polymorphisms, including a large deletion within the 5' UTR.</li>
             </ul>
         </div>
@@ -44,8 +43,8 @@
         <!-- Buttons aligned centrally for loading examples -->
         <div class="col-12 d-flex justify-content-center mt-4">
             <div class="btn-group">
-                <button id="load-example-a" class="btn btn-secondary">Load Example A</button>
-                <button id="load-example-b" class="btn btn-secondary">Load Example B</button>
+                <button id="load-example-a" class="btn btn-secondary">Load Example A: Reference</button>
+                <button id="load-example-b" class="btn btn-secondary">Load Example B: Variant</button>
             </div>
         </div>
     </div>
@@ -126,7 +125,7 @@
     <div class="card">
         <div class="card-body">
             <h3>miniSLAC</h3>
-            <p>This is the abbreviated SLAC, ideal for thumbnail previews to aid efficient navigation of large datasets within standard interfaces.</p>
+            <p>This is the abbreviated SLAC, ideal for thumbnail previews to aid efficient navigation of large datasets within standard interfaces.<br />Adjust the length slider between 10 and 200 to set the maximum size.</p>
 
             <!-- miniSLAC Length -->
             <div class="d-flex align-items-center">
@@ -165,17 +164,21 @@
     <div class="card">
         <div class="card-body">
             <h3>Python Code Example</h3>
-            <p>Thinking of using SLAC in your pipeline? Example Python code for its use is shown below:</p>
+            <p>Thinking of using SLAC in your pipeline? Example Python code is shown below:</p>
             <pre class="bg-light p-3" style="font-family: 'Courier New'; color: black;">
 from slac import SLAC
 
+# Initialise with aligned sequences
 slac_seq = SLAC(genomic="ATG...", cds="ATG...", hit="ATT...", size_limit=50)
 
-slac_seq  # miniSLAC is the default string representation
+# Print miniSLAC representation
+print(slac_seq)
 
-# --- Other representations ---
+# Other representations
 slac_seq.full()  # fullSLAC representation
 slac_seq.full(encoded_hit=True)  # seqSLAC representation
+
+# Additional metrics such as identity relative to the coding or genomic sequence are also accessible via the SLAC object.
             </pre>
         </div>
     </div>
@@ -200,6 +203,27 @@ slac_seq.full(encoded_hit=True)  # seqSLAC representation
         </div>
     </div>
 </section>
+
+<!-- Footer Section -->
+<footer class="footer footer-transparent d-print-none">
+    <div class="container">
+        <div class="row text-center align-items-center flex-row-reverse">
+            <div class="col-lg-auto ms-lg-auto">
+                <ul class="list-inline list-inline-dots mb-0">
+                    <li class="list-inline-item">
+                        <a href="https://github.com/ryanzujic" target="_blank" class="link-secondary">GitHub</a>
+                    </li>
+                    <li class="list-inline-item">
+                        <a href="https://linkedin.com/in/ryanzujic" target="_blank" class="link-secondary">LinkedIn</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-12 col-lg-auto mt-3 mt-lg-0">
+                <small class="text-muted">© 2024 Ryan Zujic</small>
+            </div>
+        </div>
+    </div>
+</footer>
 
 <!-- External JavaScript -->
 <script src="main.js"></script>
