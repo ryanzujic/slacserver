@@ -44,12 +44,12 @@
             <!-- Buttons aligned centrally for loading examples -->
             <div class="col-12 d-flex justify-content-center mt-4">
                 <div class="btn-group">
-                    <button id="load-example-a" class="btn btn-secondary">Load Example A: Reference</button>
-                    <button id="load-example-b" class="btn btn-secondary">Load Example B: Variant</button>
+                    <button id="load-example-a" class="btn btn-secondary me-2">Load Example A: Reference</button>
+                    <button id="load-example-b" class="btn btn-secondary me-2">Load Example B: Variant</button>
                 </div>
             </div>
             <p class="text-center mt-2">
-                Don't have your own sequences at hand? Click above to load an example based on the graphic above.
+                Don't have your own sequences at hand? Click above to load an example based on the graphic above then scroll down to the outputs.
             </p>
             <ul class="list-unstyled text-center">
                 <li><strong>Example A:</strong> Query gene aligned to a reference soybean genome. All positions match, and SLAC outputs enable convenient communication of the gene’s structure.</li>
@@ -121,7 +121,7 @@
     </div>
 </section>
 
-<!-- Customization options (Slider for miniSLAC length) -->
+<!-- Log/Reporting Section -->
 <section class="container my-4">
     <!-- Log/Reporting Alert (default placeholder) -->
     <div id="log-alert" class="alert alert-info" role="alert">
@@ -139,8 +139,8 @@
             <!-- miniSLAC Length -->
             <div class="d-flex align-items-center">
                 <label for="mini-slac-length" class="me-3">Length</label> <!-- Label to the left of the slider -->
-                <input type="range" class="form-range" id="mini-slac-length" min="10" max="200" value="50" oninput="updateNumberInput(this.value)">
-                <input type="number" id="mini-slac-length-input" class="form-control mx-3" style="width: 80px;" min="10" max="200" value="50" oninput="updateSliderInput(this.value)">
+                <input type="range" class="form-range" id="mini-slac-length" min="10" max="200" value="30" oninput="updateNumberInput(this.value)">
+                <input type="number" id="mini-slac-length-input" class="form-control mx-3" style="width: 80px;" min="10" max="200" value="30" oninput="updateSliderInput(this.value)">
             </div>
 
             <!-- miniSLAC output -->
@@ -178,7 +178,7 @@
 from slac import SLAC
 
 # Initialise with aligned sequences
-slac_seq = SLAC(genomic="ATG...", cds="ATG...", hit="ATT...", size_limit=50)
+slac_seq = SLAC(genomic="ATG...", cds="ATG...", hit="ATT...", size_limit=30)
 
 # Print miniSLAC representation
 print(slac_seq)

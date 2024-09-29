@@ -8,7 +8,7 @@ const EXAMPLE_B_GENOMIC_SEQ = 'TGAATATTATTCTAATTTAACTAATGGCCTTAAACTTGGATACTTATGC
 const EXAMPLE_B_CODING_SEQ = '---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ATGAACTATTCTTCGGGCTTTTTCATCATTCTTCTTCTGCTGCTATCCCATTTCTTCCCATATTCAAGCTCGAGCATGAGAATAATGATTCAGCAAGTCACCAAAGCAGCAACAGAAAATCACCATCACAT----------------------------------------------------------------------------------------------------------------------------------------GTCAAGAGGAGCTGAGAGGGATCATGTTCAAAGGAAAGCATTGCATGAAGTACACTCAGGACCTAATCCTATCAGTAACTCCATTCCACAACAGAAGTTGAAAAATATACAAAGAAATCATATGCATTAG-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------'
 const EXAMPLE_B_HIT_SEQ = 'TGAATATTATTCTAATTTAACTAATGGCCTTAAACTTGGATACTTATGCAATTAATTAAGTTAGATACTTCAGAAAGAGAACTTTAACTATCCTAATAATCATATTCAAGTCAAACAAGATTCTATTTCCTAGAATATACATGCGAAGTAAAAAAAATGACACTATAATTGATTTTAGCATTTATTATATTTTATCATCATTGAGTGAGAATAATTTTGCTCTTATAAAAACATTTATGCCATACCAATCGACCCCATTTAAGGTTGATGATAGTGCAGCCATGCAGGGAAAGTAAACCCAAATAATAGTACGAAGTAGCTAGGCATAAAAAACTTCAAACAATATATTGTTCTCCCACTATCTAAAAACAAGAAGCCCGGCCCCCATTTTGTGGAGACCACGTATATACTCCA--------------------------------------------------------------------------------------------------------------------------------------------------------------------------GTAGCTAATACTTTTTCTCGATCTAAACCTGCATGTTTACCACTTTCATGAAACAAAAACTATGAACTATTCTTCGGGCTTTTTCATCATTCTTCTTCTGCTGCTATACCATTTCTTCCCATATTCAAGCTCGAGCATGAGAATAATGATTCAGCAAGTCACCAAAGCAGCAACAGAAAATCACCATCACATGGTAAGTATATAATTTCTTTGATATGATCCATAATCACTTTTTATTTTTTATAAGCAAGAGGAGCTTTTAAGTTCCTATCATGTTTTCTCTTC--TTTTTTTCTTGGGTGAAGTTATCATGTTTTCTTTCGTGCCAGTCAAGAGGAGCTGAGAGGGATCATGTTCAAAGGAAAGCATTGCATGAAGTACACTCAGGACCTAATCCTATCAGTAACTCCATTCCACAACAGAAGTTGAAAAATATACAAAGAAATCATATGCATTAGGTCTTCTTTTGTATGTTAATTAATTATTTTTTCCTTTTCTTAATAGTAAACTCTCTTTTCCTTTTCTGTTCTTTGTTCTTTCTTTCCCTCCCTTCCTCATATTTGTTACACATATTTCATGAGTCAGCTTTGAATCATGCATAATGAATATAAATTCAGATTGATGCATAACTATAGCTAGCATGACCATCTTCAGTTCTTCACTCTTTTCATTGTGTTATACTGTTATTATCCCTCCCTCCCTCCCT--CT--CTCATTTTTCTTTGCGTATAAATTTCAAT'
 
-const DEFAULT_SLAC_LENGTH = 50;
+const DEFAULT_SLAC_LENGTH = 30;
 
 // Internal variables to track user inputs to allow re-querying backend on SLAC length change.
 // In terms of efficiency, it's not ideal re-running the whole thing each time but we'll cross that bridge when we need to.
@@ -80,7 +80,7 @@ function scrollToResults() {
 
         // Scroll to the log and output if neither is currently in view
         if (!isInViewport(miniSlacCard) && !isInViewport(logAlert)) {
-            logAlert.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            logAlert.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'nearest' });
         }
     } catch (error) {
         console.error('Error during scroll to results:', error);
