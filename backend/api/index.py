@@ -167,7 +167,7 @@ def process_sequences(hit_seq, full_ref_seq, ref_context_seq, mini_slac_length):
     try:
         slac = SLAC(genomic=full_ref_seq, cds=ref_context_seq, hit=hit_seq, auto_align_cds_to_genomic=True, size_limit=mini_slac_length)
     except Exception as e:
-        return jsonify({'error': f"Error processing SLAC."})
+        return jsonify({'error': f"Error processing SLAC: {str(e)}"})
 
     processing_time = time.time() - start_time
 
