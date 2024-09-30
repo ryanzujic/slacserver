@@ -33,6 +33,36 @@ document.getElementById('load-example-b').addEventListener('click', () => {
     document.getElementById('process-per-sequence').click();
 });
 
+// Event listener for 'View as FASTA Text' link
+document.getElementById('copy-per-sequence-to-fasta-text').addEventListener('click', (event) => {
+    event.preventDefault(); // Prevent default anchor behavior
+
+    // Get the sequence values from the Per Sequence tab
+    const genomicSeq = document.getElementById('genomic-seq').value.trim();
+    const codingSeq = document.getElementById('coding-seq').value.trim();
+    const hitSeq = document.getElementById('hit-seq').value.trim();
+
+    // Create FASTA formatted text
+    let fastaText = '';
+
+    if (genomicSeq) {
+        fastaText += '>genomic\n' + genomicSeq + '\n';
+    }
+    if (codingSeq) {
+        fastaText += '>coding\n' + codingSeq + '\n';
+    }
+    if (hitSeq) {
+        fastaText += '>hit\n' + hitSeq + '\n';
+    }
+
+    // Set the value of the FASTA text area in the FASTA Text tab
+    document.getElementById('fasta-text-input').value = fastaText;
+
+    // Switch to the FASTA Text tab
+    const fastaTextTab = new bootstrap.Tab(document.getElementById('fasta-text-tab'));
+    fastaTextTab.show();
+});
+
 // Helper functions for sliders and inputs
 function updateNumberInput(value) {
     document.getElementById('mini-slac-length-input').value = value;
@@ -132,7 +162,7 @@ document.getElementById('process-per-sequence').addEventListener('click', async 
 });
 
 document.getElementById('process-fasta-text').addEventListener('click', async () => {
-    const fastaText = document.getElementById('fasta-text').value.trim();
+    const fastaText = document.getElementById('fasta-text-input').value.trim();
     miniSlacLength = document.getElementById('mini-slac-length').value;
 
     lastInputMethod = 'process-fasta-text';

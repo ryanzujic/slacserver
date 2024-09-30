@@ -94,6 +94,8 @@
                         <label for="hit-seq" class="form-label">Aligned Hit Sequence</label>
                         <input type="text" class="form-control" id="hit-seq" placeholder="Enter hit sequence">
                     </div>
+                    <!-- Simple text link to copy this text to the FASTA tab -->
+                    <p><a id="copy-per-sequence-to-fasta-text" style="cursor: pointer; text-decoration: underline; color: #007bff;">View as FASTA Text</a></p>
                     <button id="process-per-sequence" class="btn btn-primary w-100">Process</button>
                 </div>
 
@@ -102,7 +104,7 @@
                     <p>Paste 2 to 3 aligned FASTA sequences. They must be ordered as genomic, coding (optional) then hit. Please ensure each sequence has a definition line starting with a carat.</p>
                     <div class="mb-3">
                         <label for="fasta-text" class="form-label">FASTA Input</label>
-                        <textarea class="form-control" id="fasta-text" rows="5" placeholder="Paste your aligned FASTA sequences here"></textarea>
+                        <textarea class="form-control" id="fasta-text-input" rows="5" placeholder="Paste your aligned FASTA sequences here"></textarea>
                     </div>
                     <button id="process-fasta-text" class="btn btn-primary w-100">Process</button>
                 </div>
@@ -136,6 +138,11 @@
             <h3>miniSLAC</h3>
             <p>This is the abbreviated SLAC, ideal for thumbnail previews to aid efficient navigation of large datasets within standard interfaces.<br />Adjust the length slider between 10 and 200 to set the maximum size.</p>
 
+            <!-- miniSLAC output -->
+            <pre id="minislac-output" class="bg-primary-lt border border-primary p-3 rounded text-center"
+                 style="font-family: 'Courier New'; color: black; white-space: pre-wrap;">
+            </pre>
+
             <!-- miniSLAC Length -->
             <div class="d-flex align-items-center">
                 <label for="mini-slac-length" class="me-3">Length</label> <!-- Label to the left of the slider -->
@@ -143,8 +150,6 @@
                 <input type="number" id="mini-slac-length-input" class="form-control mx-3" style="width: 80px;" min="10" max="200" value="30" oninput="updateSliderInput(this.value)">
             </div>
 
-            <!-- miniSLAC output -->
-            <pre id="minislac-output" class="bg-light p-3" style="font-family: 'Courier New'; color: black;"></pre>
             <button id="copy-minislac" class="btn btn-secondary">Copy miniSLAC Output</button>
         </div>
     </div>
