@@ -44,12 +44,12 @@
             <!-- Buttons aligned centrally for loading examples -->
             <div class="col-12 d-flex justify-content-center flex-wrap mt-4">
                 <div class="btn-group">
-                    <button id="load-example-a" class="btn btn-secondary me-2 mb-2 w-auto w-md-25">Load Example A:<br />Reference</button>
-                    <button id="load-example-b" class="btn btn-secondary me-2 mb-2 w-auto w-md-25">Load Example B:<br />Variant</button>
+                    <button id="load-example-a" class="btn btn-secondary me-2 mb-2 w-auto w-md-25">Load Example A:<br />Reference Hit</button>
+                    <button id="load-example-b" class="btn btn-secondary me-2 mb-2 w-auto w-md-25">Load Example B:<br />Variant Hit</button>
                 </div>
             </div>
             <p class="text-center mt-2">
-                Don't have your own sequences at hand? Click above to load an example based on the graphic above then scroll down to the outputs.
+                Don't have your own sequences at hand? Click above to load an example gene-to-hit alignment based on the graphic above.
             </p>
             <ul class="list-unstyled text-center">
                 <li><strong>Example A:</strong> Query gene aligned to a reference soybean genome. All positions match, and SLAC outputs enable convenient communication of the gene’s structure.</li>
@@ -239,6 +239,12 @@ slac_seq.full(encoded_hit=True)  # seqSLAC representation
         </div>
     </div>
 </footer>
+
+<!-- Toast container for minimal notifications -->
+<div id="toast" class="toast" style="position: absolute; top: 20px; right: 20px;" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="toast-body">
+    </div>
+</div>
 
 <!-- External JavaScript -->
 <script src="main.js"></script>
