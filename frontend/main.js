@@ -267,44 +267,6 @@ function displayResults(data) {
     scrollToResults();
 }
 
-// Handle miniSLAC length changes once an output has already been generated
-document.getElementById('mini-slac-length').addEventListener('change', async () => {
-    refreshOutputsOnLengthChange();
-});
-
-// Copy miniSLAC output to clipboard
-document.getElementById('copy-minislac').addEventListener('click', function() {
-    const miniSlacOutput = document.getElementById('minislac-output').textContent;
-    if (miniSlacOutput) {
-        copyToClipboard(miniSlacOutput);
-        showToast('miniSLAC Output copied to clipboard!');
-    } else {
-        showToast('No miniSLAC output to copy.');
-    }
-});
-
-// Copy fullSLAC output to clipboard
-document.getElementById('copy-fullslac').addEventListener('click', function() {
-    const fullSlacOutput = document.getElementById('fullslac_output').value;
-    if (fullSlacOutput) {
-        copyToClipboard(fullSlacOutput);
-        showToast('fullSLAC Output copied to clipboard!');
-    } else {
-        showToast('No fullSLAC output to copy.');
-    }
-});
-
-// Copy seqSLAC output to clipboard
-document.getElementById('copy-seqslac').addEventListener('click', function() {
-    const seqSlacOutput = document.getElementById('seqslac_output').value;
-    if (seqSlacOutput) {
-        copyToClipboard(seqSlacOutput);
-        showToast('seqSLAC Output copied to clipboard!');
-    } else {
-        showToast('No seqSLAC output to copy.');
-    }
-});
-
 // Helper function to copy text to clipboard
 function copyToClipboard(text) {
     const tempTextArea = document.createElement('textarea');
@@ -321,6 +283,44 @@ function showToast(message) {
     toast.querySelector('.toast-body').textContent = message;
     new bootstrap.Toast(toast).show();
 }
+
+// Handle miniSLAC length changes once an output has already been generated
+document.getElementById('mini-slac-length').addEventListener('change', async () => {
+    refreshOutputsOnLengthChange();
+});
+
+// Copy miniSLAC output to clipboard
+document.getElementById('copy-minislac').addEventListener('click', (event) => {
+    const miniSlacOutput = document.getElementById('minislac-output').textContent;
+    if (miniSlacOutput) {
+        copyToClipboard(miniSlacOutput);
+        showToast('miniSLAC Output copied to clipboard!');
+    } else {
+        showToast('No miniSLAC output to copy.');
+    }
+});
+
+// Copy fullSLAC output to clipboard
+document.getElementById('copy-fullslac').addEventListener('click', (event) => {
+    const fullSlacOutput = document.getElementById('fullslac_output').value;
+    if (fullSlacOutput) {
+        copyToClipboard(fullSlacOutput);
+        showToast('fullSLAC Output copied to clipboard!');
+    } else {
+        showToast('No fullSLAC output to copy.');
+    }
+});
+
+// Copy seqSLAC output to clipboard
+document.getElementById('copy-seqslac').addEventListener('click', (event) => {
+    const seqSlacOutput = document.getElementById('seqslac_output').value;
+    if (seqSlacOutput) {
+        copyToClipboard(seqSlacOutput);
+        showToast('seqSLAC Output copied to clipboard!');
+    } else {
+        showToast('No seqSLAC output to copy.');
+    }
+});
 
 // Clear page on refresh and handle version display
 window.addEventListener('DOMContentLoaded', () => {
