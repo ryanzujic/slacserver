@@ -277,11 +277,14 @@ function copyToClipboard(text) {
     document.body.removeChild(tempTextArea);
 }
 
-// Function to show a Bootstrap toast
+// Function to show a Bootstrap toast (minimal notification)
 function showToast(message) {
-    const toast = document.getElementById('toast');
-    toast.querySelector('.toast-body').textContent = message;
-    new bootstrap.Toast(toast).show();
+    const toastElement = document.getElementById('toast');
+    const toastBody = toastElement.querySelector('.toast-body');
+    toastBody.textContent = message;
+
+    const toast = new bootstrap.Toast(toastElement);
+    toast.show();
 }
 
 // Handle miniSLAC length changes once an output has already been generated
