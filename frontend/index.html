@@ -33,10 +33,49 @@
     <div class="row">
         <div class="col-12 text-center">
             <h4>Introduction to SLAC (Single Line Alignment with Context)</h4>
-            <p>Single Line Alignment with Context (SLAC) is a system to display DNA alignments of hits to their query gene's coding and non-coding structure, with extremely compact, plain-text previews.<br />These are ideal 'thumbnails' for everything from spreadsheet workflows to hover text in PAV matrices.</p>
+            <p>Single Line Alignment with Context (SLAC) is a system to display DNA alignments of hits to their query gene's coding and non-coding structure, with extremely compact, plain-text previews.<br /><br />These are ideal 'thumbnails' for everything from spreadsheet workflows to hover text in PAV matrices.<br /></p>
+        </div>
+        <div class="col-12 text-center my-3">
             <img src="images/minislac_simple_example.png" alt="miniSLAC header image" width="600">
         </div>
     </div>
+
+    <!-- Section for SLAC Encoding Info Table -->
+    <section class="container my-4">
+        <div class="card">
+            <!-- Card header to collapse the content -->
+            <div class="card-header">
+                <h3 class="card-title">
+                    <a data-bs-toggle="collapse" href="#encodingInfo" role="button" aria-expanded="false" aria-controls="encodingInfo">
+                        Click more for more about how SLAC encodes the three input sequences.
+                    </a>
+                </h3>
+            </div>
+
+            <!-- Collapsible card content -->
+            <div class="collapse" id="encodingInfo">
+                <div class="card-body">
+                    <div class="row">
+                        <!-- Left column: Description -->
+                        <div class="col-md-6">
+                            <p>
+SLAC generates an initial full-length, single-sequence encoding of the aligned genomic, coding and hit sequences using the 'Full' mapping at each position. A position in the genomic sequence which is a gap in the coding sequence is considered non-coding.<br />
+For miniSLAC to reduce this from potentially 1000s to 10s of characters, blocks of characters are abbreviated.<br /><br />
+miniSLAC introduces 'Partial' characters, which are used when the block of 'Full' characters are not all the same (e.g. it contains mostly matches). In this case, we use the Partial version of the most frequent Full character.<br /><br />
+Additional logic is added for readability, such as full characters at the boundaries of matching coding and non-regions being preserved to avoid the impression of imperfect matches.<br /><br />
+The symbolic meaning of Full and Partial characters can be imagined where the input alignment is layered from bottom to top as genomic, coding and hit (e.g. | spans all three, ^ is an insert in the hit, = covers genomic and coding only, and _ is genomic only).
+                            </p>
+                        </div>
+                        <!-- Right column: SLAC encoding table will be inserted here -->
+                        <div class="col-md-6">
+                            <div id="slac-encoding-table"></div> <!-- SLAC encoding table is inserted here via JS -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
 
     <!-- Section with examples description and buttons -->
     <div class="row mt-2">

@@ -15,6 +15,30 @@ const DEFAULT_SLAC_LENGTH = 30;
 let lastInputMethod = null;
 let miniSlacLength = null;
 
+// Table showing how SLAC encodes positions/blocks of the alignment
+const slacEncodingInfoTable = [
+    { label: 'Coding match', full: '|', partial: '!' },
+    { label: 'Coding mismatch', full: 'X', partial: 'x' },
+    { label: 'Non-coding match', full: 'O', partial: 'o' },
+    { label: 'Non-coding mixmatch', full: '.', partial: ',' },
+    { label: 'Non-coding gap', full: '_', partial: '-' },
+    { label: 'Coding gap', full: '=', partial: ':' },
+    { label: 'Insertion', full: '^', partial: '`' }
+];
+
+// Function to generate the table
+function generateTable(data) {
+    let table = '<table class="table table-bordered"><thead><tr><th></th><th>Full</th><th>Partial</th></tr></thead><tbody>';
+    data.forEach(row => {
+        table += `<tr><td>${row.label}</td><td>${row.full}</td><td>${row.partial}</td></tr>`;
+    });
+    table += '</tbody></table>';
+    return table;
+}
+
+// Insert the generated table into the DOM
+document.getElementById('slac-encoding-table').innerHTML = generateTable(slacEncodingInfoTable);
+
 // Load Example A - Pre-fill sequences and trigger process
 document.getElementById('load-example-a').addEventListener('click', () => {
     document.getElementById('per-sequence-tab').click();
